@@ -29,3 +29,5 @@ $databases['default']['default'] = array (
   'driver' => 'mysql',
 );
 
+$settings['config_sync_directory'] = 'sites/default/sync';
+
