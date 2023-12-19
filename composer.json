@@ -1,6 +1,6 @@
 {
     "name": "drupal/recommended-project",
-    "description": "Project template for Drupal 9 projects with a relocated document root",
+    "description": "Project template for Drupal projects with a relocated document root",
     "type": "project",
     "license": "GPL-2.0-or-later",
     "homepage": "https://www.drupal.org/project/drupal",
@@ -15,19 +15,36 @@
         }
     ],
     "require": {
-        "composer/installers": "^1.9",
-        "drupal/admin_toolbar": "^3.0",
-        "drupal/bootstrap": "^3.23",
-        "drupal/bootstrap_layout_builder": "^2.0",
-        "drupal/ckeditor_codemirror": "^2.3",
-        "drupal/core-composer-scaffold": "^10.0",
-        "drupal/core-recommended": "^10.0",
-        "drupal/fontawesome": "^2.19",
-        "drupal/fontyourface": "^3.6",
-        "drupal/pathauto": "^1.8",
-        "drupal/youtube": "^1.2",
-        "drush/drush": "*",
-        "wikimedia/composer-merge-plugin": "^2.0"
+        "composer/installers": "^2.0",
+        "drupal/admin_toolbar": "^3.4",
+        "drupal/aggregator": "^2.1",
+        "drupal/bartik": "^1.0",
+        "drupal/better_social_sharing_buttons": "^4.0",
+        "drupal/bootstrap": "^3.29",
+        "drupal/bootstrap_layout_builder": "^2.1",
+        "drupal/bootstrap_styles": "^1.1",
+        "drupal/ckeditor": "^1.0",
+        "drupal/ckeditor_codemirror": "^3.0@beta",
+        "drupal/color": "^1.0",
+        "drupal/core-composer-scaffold": "^10.2",
+        "drupal/core-project-message": "^10.2",
+        "drupal/core-recommended": "^10.2",
+        "drupal/flippy": "^2.0@beta",
+        "drupal/fontawesome": "^2.26",
+        "drupal/fontawesome_iconpicker_widget": "^2.26",
+        "drupal/fontyourface": "^4.0",
+        "drupal/google_analytics": "^4.0",
+        "drupal/google_fonts_api": "^4.0",
+        "drupal/local_fonts": "^4.0",
+        "drupal/login_destination": "^2.0@beta",
+        "drupal/media_library_form_element": "^2.0",
+        "drupal/media_library_theme_reset": "^1.5",
+        "drupal/pathauto": "^1.12",
+        "drupal/quickedit": "^1.0",
+        "drupal/rdf": "^2.1",
+        "drupal/seven": "^1.0",
+        "drupal/token": "^1.13",
+        "drupal/youtube": "^2.0"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -35,19 +52,17 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
-        "sort-packages": true,
         "allow-plugins": {
             "composer/installers": true,
             "drupal/core-composer-scaffold": true,
-            "wikimedia/composer-merge-plugin": true
-        }
+            "drupal/core-project-message": true,
+            "phpstan/extension-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "php-http/discovery": true
+        },
+        "sort-packages": true
     },
     "extra": {
-        "merge-plugin": {
-            "include": [
-                "/var/www/nerdperk/web/modules/contrib/ckeditor_codemirror/composer.libraries.json"
-            ]
-        },
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
@@ -94,7 +109,7 @@
                 "<bg=blue;fg=white>                                                         </>",
                 "",
                 "<bg=yellow;fg=black>Next steps</>:",
-                "  * Install the site: https://www.drupal.org/docs/10/install",
+                "  * Install the site: https://www.drupal.org/docs/installing-drupal",
                 "  * Read the user guide: https://www.drupal.org/docs/user_guide/en/index.html",
                 "  * Get support: https://www.drupal.org/support",
                 "  * Get involved with the Drupal community:",
@@ -103,5 +118,8 @@
                 "      composer remove drupal/core-project-message"
             ]
         }
+    },
+    "require-dev": {
+        "drush/drush": "^12.4"
     }
 }
