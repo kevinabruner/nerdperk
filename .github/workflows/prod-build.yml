@@ -1,0 +1,26 @@
+name: Populate Variables
+
+on:
+  push:
+    branches:      
+      - main
+
+jobs:
+  build-prod:    
+    runs-on: [self-hosted, prod]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Run script
+        run: |
+          # Your script using the populated variables          
+          sudo ${{ github.workspace }}/scripts/install.sh \
+            ${{ secrets.DBNAME }} \
+            ${{ secrets.DBUSER }} \
+            ${{ secrets.DBPASSWORD }} \
+            ${{ github.workspace }} \
+            ${GITHUB_REPOSITORY#*/} \
+            ${{ github.ref }} \
+            > /home/kevin/installLog.txt
