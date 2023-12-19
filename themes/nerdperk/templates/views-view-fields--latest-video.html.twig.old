@@ -1,0 +1,9 @@
+<div class="home-vid-thumb">
+  {{ fields.field-youtube-video.content }}
+</div>
+<div class="home-vid-text">
+  <div class="home-vid-text">
+    {{ fields.title.content }}
+  </div>
+    {{ fields.body.content }}
+</div>
