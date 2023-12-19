@@ -21,7 +21,7 @@ filesDir="/var/www/web/sites/default/files/"
 rsync -avr /home/$linuxUser/files/* $filesDir/ --ignore-existing
 
 
-mkdir /var/www/html/sites/default/sync
+mkdir /var/www/web/sites/default/sync
 
 #chowns the correct ownership
 chown -R $linuxUser:www-data /var/www
