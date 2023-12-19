@@ -20,8 +20,13 @@ cp -R $gitDir/themes/* /var/www/web/themes/contrib/
 filesDir="/var/www/web/sites/default/files/"
 rsync -avr /home/$linuxUser/files/* $filesDir/ --ignore-existing
 
+
+mkdir /var/www/html/sites/default/sync
+
 #chowns the correct ownership
 chown -R $linuxUser:www-data /var/www
+
+
 
 #updates using drush
 cd /var/www
