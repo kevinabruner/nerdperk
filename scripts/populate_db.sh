@@ -2,7 +2,7 @@
 source /etc/environment
 
 ###database import###
-sqlFile="/home/$linuxUser/db-dumps/drupal.sql" 
+sqlFile="/home/$linuxUser/db-dumps/$dbName.sql" 
 
 # Check if the database exists
 databaseExists=$(mysql -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbName';" -s)
