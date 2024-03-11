@@ -4,7 +4,7 @@ source /etc/environment
 ###nfs mounting###
 nfsEntries=(
     /home/$linuxUser/db-dumps
-    /home/$linuxUser/files
+    /var/www/web/sites/default/files/
 )
 
 
@@ -22,5 +22,3 @@ for entry in "${nfsEntries[@]}"; do
         echo "Entry already exists: $entry"
     fi
 done
-
-mount -a
