@@ -9,7 +9,7 @@ grep -qxF 'alias drush="/var/www/vendor/drush/drush/drush"' ~/.bashrc || echo 'a
 #installs dependencies
 sudo  DEBIAN_FRONTEND=noninteractive apt-get update -yq
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -yq
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq apache2 mysql-server php php-gd php-pdo php-mysql php-dom php-curl ncdu gh composer vim nfs-common htop
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq apache2 mysql-client php php-gd php-pdo php-mysql php-dom php-curl ncdu gh composer vim nfs-common htop
 
 
 #enables and starts services
