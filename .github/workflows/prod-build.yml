@@ -6,8 +6,11 @@ on:
       - main
 
 jobs:
-  build-prod:    
-    runs-on: [self-hosted, prod]
+  build-dev:    
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        runner: [ prod1, prod2 ]
     
     steps:
       - name: Checkout code
@@ -15,12 +18,4 @@ jobs:
       
       - name: Run script
         run: |
-          # Your script using the populated variables          
-          sudo ${{ github.workspace }}/scripts/install.sh \
-            ${{ secrets.DBNAME }} \
-            ${{ secrets.DBUSER }} \
-            ${{ secrets.DBPASSWORD }} \
-            ${{ github.workspace }} \
-            ${GITHUB_REPOSITORY#*/} \
-            ${{ github.ref }} \
-            > /home/kevin/installLog.txt
+          sudo ${{ github.workspace }}/scripts/install.sh -p ${{ secrets.DBPASSWORD }} -w ${{ github.workspace }} -a ${GITHUB_REPOSITORY#*/} -b ${{ github.ref }} -s ${{ matrix.runner }} > /home/kevin/installLog.txt
