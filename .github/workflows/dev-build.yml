@@ -11,11 +11,14 @@ jobs:
     strategy:
       matrix:
         runner: [ dev2, dev1 ]
-    
+   
+  
     steps:
       - name: Checkout code
         uses: actions/checkout@v2      
 
       - name: Run script
-        run: |
+
+        run: |          
           sudo ${{ github.workspace }}/scripts/install.sh -p ${{ secrets.DBPASSWORD }} -w ${{ github.workspace }} -a ${GITHUB_REPOSITORY#*/} -b ${{ github.ref }} -s ${{ matrix.runner }} > /home/kevin/installLog.txt
+
