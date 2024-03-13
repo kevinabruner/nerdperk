@@ -6,17 +6,20 @@ on:
       - main
 
 jobs:
+
   build-prod:    
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
         runner: [ prod2, prod1 ] 
+
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v2      
 
       - name: Run script
+
         run: |          
           sudo ${{ github.workspace }}/scripts/install.sh -p ${{ secrets.DBPASSWORD }} -w ${{ github.workspace }} -a ${GITHUB_REPOSITORY#*/} -b ${{ github.ref }} -s ${{ matrix.runner }} > /home/kevin/installLog.txt
           

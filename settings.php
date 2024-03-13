@@ -19,15 +19,13 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 $settings['hash_salt'] = 'thisiskindrandomiguess';
 
 $databases['default']['default'] = array (
-  'database' => '',
-  'username' => '',
-  'password' => '',
+  'database' => '@@@dbName',
+  'username' => '@@@username',
+  'password' => '@@@password',
   'prefix' => '',
-  'host' => 'localhost',
+  'host' => '@@@dbHost',
   'port' => '3306',
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
 );
-
-$settings['config_sync_directory'] = 'sites/default/files/config';
-
+$settings['config_sync_directory'] = 'sites/default/files/config_ciXpqQpUq-Xu3ZEcbz5ZB3OmDxY90bSKmtPG-CHuzxMGgcyFDxuYCMHwfcI8THYIkoSvDcvCnw/sync';

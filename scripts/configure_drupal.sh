@@ -7,6 +7,7 @@ cd $settingsDir
 cp $gitDir/settings.php $settingsDir/
 
 # Replace values in settings.php
+
 sudo sed -i.bak -E "s/\@@@dbName/$dbName/g" settings.php
 sudo sed -i.bak -E "s/\@@@username/$username/g" settings.php
 sudo sed -i.bak -E "s/\@@@password/$password/g" settings.php
