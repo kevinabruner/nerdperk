@@ -22,3 +22,6 @@ for entry in "${nfsEntries[@]}"; do
         echo "Entry already exists: $entry"
     fi
 done
+
+sudo mount -a
+
