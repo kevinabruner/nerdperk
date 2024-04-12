@@ -45,7 +45,7 @@
 
     - name: Debug nfs_server variable
       debug:
-        msg: "Value of nfs_server: {{ nfs_server }}:{{ nfs_share }}"
+        msg: "Value of nfs_server: {{ nfs_server }}:{{ nfs_share }} on {{ nfs_target_dir }}"
     
     - name: Mount NFS share
       mount:
