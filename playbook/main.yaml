@@ -5,7 +5,7 @@
   tasks:                
     - name: Install apt packages
       apt:
-        update_cache: yes
+        #update_cache: yes
         name: "{{ item }}"
       loop:
         - apache2
