@@ -230,14 +230,14 @@
       become: true
       replace:
         path: /path/to/settings.php
-        regexp: "{{ item.pattern }}"
-        replace: "{{ item.replacement }}"
+        regexp: "{{ placeholder.pattern }}"
+        replace: "{{ placeholder.replacement }}"
       vars:
         placeholders:
           - { pattern: '@@@dbName', replacement: "{{ dbName }}" }
           - { pattern: '@@@username', replacement: "{{ username }}" }
-          - { pattern: '@@@password', replacement: "{{ db_password }}" }
-          - { pattern: '@@@dbHost', replacement: "{{ DB_HOST }}" }
+          - { pattern: '@@@password', replacement: "{{ password }}" }
+          - { pattern: '@@@dbHost', replacement: "{{ dbHost }}" }
 
 
     
