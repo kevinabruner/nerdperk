@@ -41,6 +41,7 @@
       file:
         path: "{{ nfs_target_dir }}"
         state: directory
+      become: true
     
     - name: Mount NFS share
       mount:
@@ -52,6 +53,7 @@
         dump: 0
         passno: 0
         fstab: yes          
+      become: true
 
     - name: Copy keepalived script template
       copy:
@@ -83,6 +85,7 @@
       set_fact:
         VIRT_IP: "{{ internal_vip }}"  
         ROUTER_ID: "{{ internal_router }}"      
+        DB_HOST: "{{ dev_db }}"  
       when:         
         - "'dev' in group_names"
     
@@ -90,10 +93,10 @@
       set_fact:
         VIRT_IP: "{{ external_vip }}"
         ROUTER_ID: "{{ external_router }}"        
+        DB_HOST: "{{ prod_db }}"  
       when:         
         - "'prod' in group_names"                     
     
-
     - name: Replace "@@@MASTER_OR_SLAVE" in file
       lineinfile:
         path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
