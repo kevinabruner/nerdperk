@@ -228,6 +228,7 @@
 
     - name: Replace placeholders with actual values in settings.php
       become: true
+      loop: "{{ placeholders }}"
       replace:
         path: /var/www/web/sites/default/settings.php
         regexp: "{{ placeholders.pattern }}"
@@ -240,6 +241,10 @@
           - { pattern: '@@@dbHost', replacement: "{{ DB_HOST }}" }
         
 
+    - name: Copy theme(s)
+      copy:
+        src: "{{ git_dir }}/themes/"
+        dest: "/var/www/web/themes/contrib/"    
 
     
     - name: Restart apache
