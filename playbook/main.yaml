@@ -41,7 +41,7 @@
       file:
         path: "{{ nfs_target_dir }}"
         state: directory
-      become: true
+      become: www-data
 
     - name: Debug nfs_server variable
       debug:
@@ -50,7 +50,7 @@
 
     - name: Mount NFS share
       mount:
-        path: {{ nfs_target_dir }}
+        path: nfs_target_dir
         src: "{{ nfs_server }}:{{ nfs_share }}"
         fstype: nfs
         opts: "rw,defaults,nofail"
@@ -58,7 +58,7 @@
         dump: 0
         passno: 0
         fstab: yes
-      become: true
+      become: www-data
       
 
     - name: Copy keepalived script template
