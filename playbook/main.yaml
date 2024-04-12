@@ -65,16 +65,6 @@
         force: yes  # Ensure the ownership is always changed
       become: yes
 
-    - name: Create NFS mount point 
-      file:
-        path: nfs_target_dir
-        state: directory
-      become_user: kevin:www-data
-
-    - name: Debug nfs_server variable
-      debug:
-        msg: "Value of nfs_server: {{ nfs_server }}:{{ nfs_share }} on {{ nfs_target_dir }}"
-       
 
     - name: Mount NFS share
       mount:

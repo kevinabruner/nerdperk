@@ -12,6 +12,6 @@ internal_router: 171
 dev_db: 192.168.80.51
 prod_db: 192.168.80.61
 external_router: 181
-nfs_target_dir: /var/www/web/sites/default/files/
+nfs_target_dir: /home/kevin/test
 nfs_server: 192.168.11.20
 nfs_share: /mnt/yes/gitbuilds/recursioncomic
