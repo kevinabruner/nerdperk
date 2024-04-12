@@ -226,20 +226,34 @@
       command: a2enmod rewrite
 
 
-    - name: Replace placeholders with actual values in settings.php
+    - name: Replace dbName placeholder with actual value in settings.php
       become: true
-      loop: "{{ placeholders }}"
       replace:
         path: /var/www/web/sites/default/settings.php
-        regexp: "{{ placeholders.pattern }}"
-        replace: "{{ placeholders.replacement }}"
-      vars:
-        placeholders:
-          - { pattern: '@@@dbName', replacement: "{{ dbName }}" }
-          - { pattern: '@@@username', replacement: "{{ username }}" }
-          - { pattern: '@@@password', replacement: "{{ db_password }}" }
-          - { pattern: '@@@dbHost', replacement: "{{ DB_HOST }}" }
-        
+        regexp: "@@@dbName"
+        replace: "{{ dbName }}"
+
+    - name: Replace username placeholder with actual value in settings.php
+      become: true
+      replace:
+        path: /var/www/web/sites/default/settings.php
+        regexp: "@@@username"
+        replace: "{{ username }}"
+
+    - name: Replace password placeholder with actual value in settings.php
+      become: true
+      replace:
+        path: /var/www/web/sites/default/settings.php
+        regexp: "@@@password"
+        replace: "{{ db_password }}"
+
+    - name: Replace dbHost placeholder with actual value in settings.php
+      become: true
+      replace:
+        path: /var/www/web/sites/default/settings.php
+        regexp: "@@@dbHost"
+        replace: "{{ DB_HOST }}"
+            
 
     - name: Copy theme(s)
       copy:
