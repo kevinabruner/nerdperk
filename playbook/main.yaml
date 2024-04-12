@@ -85,8 +85,7 @@
         state: mounted
         dump: 0
         passno: 0
-        fstab: yes
-      become: yes
+        fstab: yes      
       
 
     - name: Copy keepalived script template
