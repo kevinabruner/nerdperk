@@ -208,11 +208,12 @@
         backup: yes
 
 
-    - name: Replace apache conf
+
+    - name: Replace block of text
       ansible.builtin.replace:
-        path: /etc/apache2/apache2.conf
-        regexp: "(<Directory /var/www/>)\n(\s+Options Indexes FollowSymLinks\n\s+AllowOverride) None(\n\s+Require all granted\n</Directory>)"
-        replace: "\1\n\2 All\3"
+        path: /path/to/your/configuration/file.conf
+        regexp: "(<Directory /var/www/>)\\n(\\s+Options Indexes FollowSymLinks\\n\\s+AllowOverride) None(\\n\\s+Require all granted\\n</Directory>)"
+        replace: "\\1\\n\\2 All\\3"
         backup: yes
 
 
