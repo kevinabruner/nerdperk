@@ -3,27 +3,27 @@
   vars_files:
     - vars.yaml
   tasks:                
-    - name: Install apt packages
-      apt:
-        #update_cache: yes
-        name: "{{ item }}"
-      loop:
-        - apache2
-        - mysql-client
-        - php
-        - php-gd
-        - php-pdo
-        - php-mysql
-        - php-dom
-        - php-curl
-        - ncdu
-        - gh
-        - composer
-        - vim
-        - nfs-common
-        - htop
-        - keepalived
-      become: true
+    # - name: Install apt packages
+    #   apt:
+    #     #update_cache: yes
+    #     name: "{{ item }}"
+    #   loop:
+    #     - apache2
+    #     - mysql-client
+    #     - php
+    #     - php-gd
+    #     - php-pdo
+    #     - php-mysql
+    #     - php-dom
+    #     - php-curl
+    #     - ncdu
+    #     - gh
+    #     - composer
+    #     - vim
+    #     - nfs-common
+    #     - htop
+    #     - keepalived
+    #   become: true
     
     - name: Enable apache2 service
       systemd:
