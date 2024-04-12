@@ -218,7 +218,7 @@
       lineinfile:
         path: /etc/apache2/apache2.conf
         regexp: '(<Directory /var/www/>.*)AllowOverride None(.*</Directory>)'
-        line: '\1AllowOverride All\2'
+        line: 'AllowOverride All'
         backup: yes
 
     - name: Enable Apache rewrite module
