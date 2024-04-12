@@ -22,3 +22,4 @@ nfs_share: /mnt/yes/gitbuilds/nerdperk/files
 dbName: "{{ APPLICATION }}"
 username: "{{ APPLICATION }}"
 db_password: obo74Cle
+drush: /var/www/vendor/drush/drush/drush
