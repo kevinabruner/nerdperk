@@ -237,7 +237,7 @@
           - { pattern: '@@@dbName', replacement: "{{ dbName }}" }
           - { pattern: '@@@username', replacement: "{{ username }}" }
           - { pattern: '@@@password', replacement: "{{ db_password }}" }
-          - { pattern: '@@@dbHost', replacement: "{{ dbHost }}" }
+          - { pattern: '@@@dbHost', replacement: "{{ DB_HOST }}" }
         
 
 
