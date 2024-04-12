@@ -162,33 +162,6 @@
         line: "  interface {{ INTERFACE }}"
       become: yes
 
-    - name: Restart apache
-      service:
-        name: apache2
-        state: restarted
-      become: yes    
-
-    - name: remove uneeded prod IP from keepalived config
-      set_fact:
-        unassigned_ips: "{{ [prod1, prod2] | difference([ansible_default_ipv4.address]) }}"    
-      when:         
-        - "'prod' in group_names"
-
-    - name: remove uneeded dev IP from keepalived config
-      set_fact:
-        unassigned_ips: "{{ [dev1, dev2] | difference([ansible_default_ipv4.address]) }}"    
-      when:         
-        - "'dev' in group_names"
-
-    - name: Replace @@@PEERS with unassigned IPs
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        regexp: '^.*@@@PEERS.*$'
-        line: "    {{ item }}"
-        backrefs: yes
-      loop: "{{ unassigned_ips }}"
-      become: yes
-
     - name: Replace "@@@SRC_IP" in file
       lineinfile:
         path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
@@ -196,45 +169,11 @@
         regexp: '^.*@@@SRC_IP.*$'
         line: "  unicast_src_ip {{ ansible_default_ipv4.address }}"  
       become: yes
-
-    - name: Replace "@@@MASTER_OR_SLAVE" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes        
-        regexp: '^.*@@@MASTER_OR_SLAVE.*$'
-        line: "  state {{ ROLE }}"  
-      become: yes
-
-    - name: Replace "@@@ROUTER_ID" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes        
-        regexp: '^.*@@@ROUTER_ID.*$'
-        line: "  virtual_router_id {{ keepalived_router }}"  
-      become: yes 
-
-    - name: Replace "@@@VIRT_IP" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes
-        regexp: '^.*@@@VIRT_IP.*$'
-        line: "    {{ keepalived_vip }}/24"
-      become: yes
-
-    - name: Replace "@@@PRIORITY" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes
-        regexp: '^.*@@@PRIORITY.*$'
-        line: "  priority {{ PRIORITY }}"
-      become: yes
-
-    - name: Replace "@@@INTERFACE" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes
-        regexp: '^.*@@@INTERFACE.*$'
-        line: "  interface {{ INTERFACE }}"
+    
+    - name: Restart apache
+      service:
+        name: apache2
+        state: restarted
       become: yes    
 
     - name: Restart keepalived
