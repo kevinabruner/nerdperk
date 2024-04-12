@@ -216,6 +216,15 @@
         insertafter: '<Directory /var/www/>'
         backup: yes
 
+    - name: Remove AllowOverride None from Apache configuration
+      become: true
+      replace:
+        path: /etc/apache2/apache2.conf
+        regexp: '(<Directory /var/www/>.*)AllowOverride None\n(.*</Directory>)'
+        replace: '\1\2'
+      notify: Restart Apache
+
+
 
     - name: Enable Apache rewrite module
       become: true
