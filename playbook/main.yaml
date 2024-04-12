@@ -229,7 +229,7 @@
     - name: Replace placeholders with actual values in settings.php
       become: true
       replace:
-        path: /path/to/settings.php
+        path: /var/www/web/sites/default/settings.php
         regexp: "{{ placeholders.pattern }}"
         replace: "{{ placeholders.replacement }}"
       vars:
@@ -238,6 +238,7 @@
           - { pattern: '@@@username', replacement: "{{ username }}" }
           - { pattern: '@@@password', replacement: "{{ password }}" }
           - { pattern: '@@@dbHost', replacement: "{{ dbHost }}" }
+        
 
 
     
