@@ -67,7 +67,7 @@
 
 
     - name: Mount NFS share
-      mount:
+      ansible.posix.mount:
         src: nas.jfkhome:/mnt/yes/gitbuilds/recursioncomic
         path: /home/kevin/test        
         fstype: 'nfs'
