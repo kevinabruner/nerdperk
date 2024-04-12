@@ -207,17 +207,21 @@
         line: 'DocumentRoot /var/www/web/'
         backup: yes
 
-    - name: Update Directory block in Apache configuration
-      blockinfile:
-        path: /etc/apache2/apache2.conf
-        block: |
-          <Directory /var/www/>
-              AllowOverride All
-              Options Indexes FollowSymLinks
-              Require all granted
-          </Directory>
-        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
+    - name: Update AllowOverride in Apache configuration
       become: true
+      lineinfile:
+        path: /etc/apache2/apache2.conf        
+        line: '        AllowOverride All'
+        insertafter: '<Directory /var/www/>'
+        backup: yes
+
+    - name: Remove AllowOverride None from Apache configuration
+      become: true
+      replace:
+        path: /etc/apache2/apache2.conf
+        regexp: '(<Directory /var/www/>.*)AllowOverride None\n(.*</Directory>)'
+        replace: '\1\2'
+      notify: Restart Apache
 
 
     - name: Enable Apache rewrite module
