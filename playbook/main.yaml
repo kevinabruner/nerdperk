@@ -1,0 +1,213 @@
+- name: Build 
+  hosts: nerdperk
+  vars_files:
+    - vars.yaml
+  tasks:                
+    - name: Install apt packages
+      apt:
+        update_cache: yes
+        name: "{{ item }}"
+      loop:
+        - apache2
+        - mysql-client
+        - php
+        - php-gd
+        - php-pdo
+        - php-mysql
+        - php-dom
+        - php-curl
+        - ncdu
+        - gh
+        - composer
+        - vim
+        - nfs-common
+        - htop
+      become: true
+    
+    - name: Enable apache2 service
+      systemd:
+        name: apache2
+        enabled: yes
+      become: true
+
+    - name: Enable keepalived service
+      systemd:
+        name: keepalived
+        enabled: yes
+      become: true
+
+    - name: Create NFS mount point 
+      file:
+        path: "{{ nfs_target_dir }}"
+        state: directory
+    
+    - name: Mount NFS share
+      mount:
+        path: "{{ nfs_target_dir }}"
+        src: "{{ nfs_server }}:{{ nfs_share }}"
+        fstype: nfs
+        opts: "rw"
+        state: mounted
+        dump: 0
+        passno: 0
+        fstab: yes          
+
+    - name: Copy keepalived script template
+      copy:
+        src: "{{ git_dir }}/{{ keepalived_conf }}"
+        dest: "{{ keepalived_dir }}"
+      become: true          
+
+    - name: Extract last digit of IP address
+      set_fact:
+        last_digit: "{{ ansible_default_ipv4.address.split('.')[-1] | int }}"
+
+    - name: Master configuration
+      set_fact:
+        ROLE: "MASTER"
+        PRIORITY: 110
+      when: "(last_digit | int) % 2 != 0"
+
+    - name: Backup configuration
+      set_fact:
+        ROLE: "BACKUP"        
+        PRIORITY: 100
+      when: "(last_digit | int) % 2 == 0"    
+    
+    - name: Display roles for the host
+      debug:
+        var: group_names
+
+    - name: Setting internal/dev IP
+      set_fact:
+        VIRT_IP: "{{ internal_vip }}"  
+        ROUTER_ID: "{{ internal_router }}"      
+      when:         
+        - "'dev' in group_names"
+    
+    - name: Setting external/prod IP
+      set_fact:
+        VIRT_IP: "{{ external_vip }}"
+        ROUTER_ID: "{{ external_router }}"        
+      when:         
+        - "'prod' in group_names"                     
+    
+
+    - name: Replace "@@@MASTER_OR_SLAVE" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes        
+        regexp: '^.*@@@MASTER_OR_SLAVE.*$'
+        line: "  state {{ ROLE }}"  
+      become: yes
+
+    - name: Replace "@@@ROUTER_ID" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes        
+        regexp: '^.*@@@ROUTER_ID.*$'
+        line: "  virtual_router_id {{ ROUTER_ID }}"  
+      become: yes 
+
+    - name: Replace "@@@VIRT_IP" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes
+        regexp: '^.*@@@VIRT_IP.*$'
+        line: "    {{ VIRT_IP }}/24"
+      become: yes
+
+    - name: Replace "@@@PRIORITY" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes
+        regexp: '^.*@@@PRIORITY.*$'
+        line: "  priority {{ PRIORITY }}"
+      become: yes
+
+    - name: Replace "@@@INTERFACE" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes
+        regexp: '^.*@@@INTERFACE.*$'
+        line: "  interface {{ INTERFACE }}"
+      become: yes
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
+      become: yes
+
+    - name: Restart keepalived
+      service:
+        name: keepalived
+        state: restarted
+      become: yes
+
+    - name: Replace @@@PEERS with unassigned IPs
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        regexp: '^.*@@@PEERS.*$'
+        line: "    {{ item }}"
+        backrefs: yes
+      loop: "{{ unassigned_ips }}"
+      become: yes
+
+    - name: Replace "@@@SRC_IP" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes        
+        regexp: '^.*@@@SRC_IP.*$'
+        line: "  unicast_src_ip {{ ansible_default_ipv4.address }}"  
+      become: yes
+
+    - name: Replace "@@@MASTER_OR_SLAVE" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes        
+        regexp: '^.*@@@MASTER_OR_SLAVE.*$'
+        line: "  state {{ ROLE }}"  
+      become: yes
+
+    - name: Replace "@@@ROUTER_ID" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes        
+        regexp: '^.*@@@ROUTER_ID.*$'
+        line: "  virtual_router_id {{ keepalived_router }}"  
+      become: yes 
+
+    - name: Replace "@@@VIRT_IP" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes
+        regexp: '^.*@@@VIRT_IP.*$'
+        line: "    {{ keepalived_vip }}/24"
+      become: yes
+
+    - name: Replace "@@@PRIORITY" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes
+        regexp: '^.*@@@PRIORITY.*$'
+        line: "  priority {{ PRIORITY }}"
+      become: yes
+
+    - name: Replace "@@@INTERFACE" in file
+      lineinfile:
+        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
+        backrefs: yes
+        regexp: '^.*@@@INTERFACE.*$'
+        line: "  interface {{ INTERFACE }}"
+      become: yes    
+
+    - name: Restart keepalived
+      service:
+        name: keepalived
+        state: restarted
+      become: yes
+
+
+    
+    
