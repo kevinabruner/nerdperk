@@ -230,8 +230,8 @@
       become: true
       replace:
         path: /path/to/settings.php
-        regexp: "{{ placeholder.pattern }}"
-        replace: "{{ placeholder.replacement }}"
+        regexp: "{{ placeholders.pattern }}"
+        replace: "{{ placeholders.replacement }}"
       vars:
         placeholders:
           - { pattern: '@@@dbName', replacement: "{{ dbName }}" }
