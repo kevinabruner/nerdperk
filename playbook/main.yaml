@@ -208,20 +208,16 @@
         backup: yes
 
     - name: Update Directory block in Apache configuration
-      lineinfile:
+      blockinfile:
         path: /etc/apache2/apache2.conf
-        regexp: '^<Directory /var/www/>'
-        insertafter: EOF
-        line: |
+        block: |
           <Directory /var/www/>
               AllowOverride All
               Options Indexes FollowSymLinks
               Require all granted
           </Directory>
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
       become: true
-
-
-
 
 
     - name: Enable Apache rewrite module
