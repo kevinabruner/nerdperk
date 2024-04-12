@@ -2,7 +2,7 @@
   hosts: nerdperk
   vars_files:
     - vars.yaml
-    tasks:                
+  tasks:                
     - name: Install apt packages
       apt:
         update_cache: yes
