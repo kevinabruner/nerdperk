@@ -65,18 +65,26 @@
         force: yes  # Ensure the ownership is always changed
       become: yes
 
+    - name: Create NFS mount point 
+      file:
+        path: nfs_target_dir
+        state: directory
+      become_user: kevin:www-data
+           
 
-    - name: Mount NFS share
-      ansible.posix.mount:
-        src: nas.jfkhome:/mnt/yes/gitbuilds/recursioncomic
-        
-        opts: default
-        state: mounted
-        fstype: nfs
-        dump: 0
-        passno: 0
-        fstab: yes      
-      
+    - name: Add NFS share entry to /etc/fstab
+      lineinfile:
+        path: /etc/fstab
+        line: "{{ nfs_server }}:{{ nfs_share }}    {{ nfs_target_dir }}    nfs    defaults    0 0"
+        insertafter: EOF
+      become: true
+
+    - name: Mount NFS share using shell
+      hosts: your_target_hosts
+      tasks:
+        - name: Mount NFS share
+          shell: mount -t nfs {{ nfs_server }}:{{ nfs_share }} {{ nfs_target_dir }}
+          become: true
 
     - name: Copy keepalived script template
       copy:
