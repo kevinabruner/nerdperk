@@ -2,10 +2,10 @@
   hosts: nerdperk
   vars_files:
     - vars.yaml
-  tasks:                
+    tasks:                
     - name: Install apt packages
       apt:
-        #update_cache: yes
+        update_cache: yes
         name: "{{ item }}"
       loop:
         - apache2
@@ -36,7 +36,6 @@
         name: keepalived
         enabled: yes
       become: true
-
 
     - name: Ensure user kevin exists
       user:
@@ -72,7 +71,6 @@
         insertafter: EOF
       become: true
         
-
     - name: Copy keepalived script template
       copy:
         src: "{{ git_dir }}/{{ keepalived_conf }}"
@@ -87,7 +85,7 @@
       set_fact:
         ROLE: "MASTER"
         PRIORITY: 110
-      when: "(last_digit | int) % 2 != 0"
+      when: "(last_digit | int) % 2 != 0"    
 
     - name: Backup configuration
       set_fact:
@@ -113,20 +111,44 @@
         ROUTER_ID: "{{ external_router }}"        
         DB_HOST: "{{ prod_db }}"  
       when:         
-        - "'prod' in group_names"                     
+        - "'prod' in group_names"      
 
-    - name: remove uneeded prod IP from keepalived config
+    - name: Setting external/prod IP
       set_fact:
-        unassigned_ips: "{{ [prod1, prod2] | difference([ansible_default_ipv4.address]) }}"    
+        VIRT_IP: "{{ external_vip }}"
+        ROUTER_ID: "{{ external_router }}"        
+        DB_HOST: "{{ prod_db }}"  
       when:         
-        - "'prod' in group_names"    
-    
-    - name: remove uneeded dev IP from keepalived config
+        - "'prod' in group_names"                  
+
+    - name: Setting peer IP for odd last digit in 'prod' group
       set_fact:
-        unassigned_ips: "{{ [dev1, dev2] | difference([ansible_default_ipv4.address]) }}"    
-      when:         
-        - "'dev' in group_names"    
-  
+        peer_ip: "{{ prod1 }}"
+      when: 
+        - (last_digit | int) % 2 != 0
+        - "'prod' in group_names"
+
+    - name: Setting peer IP for even last digit in 'prod' group
+      set_fact:
+        peer_ip: "{{ prod2 }}"
+      when: 
+        - (last_digit | int) % 2 == 0
+        - "'prod' in group_names"
+
+    - name: Setting peer IP for odd last digit in 'dev' group
+      set_fact:
+        peer_ip: "{{ dev1 }}"
+      when: 
+        - (last_digit | int) % 2 != 0
+        - "'dev' in group_names"
+
+    - name: Setting peer IP for even last digit in 'dev' group
+      set_fact:
+        peer_ip: "{{ dev2 }}"
+      when: 
+        - (last_digit | int) % 2 == 0
+        - "'dev' in group_names"
+
     - name: Replace "@@@MASTER_OR_SLAVE" in file
       lineinfile:
         path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
@@ -159,15 +181,13 @@
         line: "  priority {{ PRIORITY }}"
       become: yes
 
-    - name: Replace @@@PEERS with unassigned IPs
+    - name: Replace @@@PEERS with unassigned IP
       lineinfile:
         path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
         regexp: '^.*@@@PEERS.*$'
-        line: "    {{ item }}"
+        line: "    {{ peer_ip }}"
         backrefs: yes
-      loop: "{{ unassigned_ips }}"
       become: yes
-
 
     - name: Replace "@@@INTERFACE" in file
       lineinfile:
@@ -185,13 +205,10 @@
         line: "  unicast_src_ip {{ ansible_default_ipv4.address }}"  
       become: yes
 
-
     - name: Copy keepalived script template
       copy:
         src: "{{ git_dir }}/composer.json"
         dest: "/var/www/"           
-
-
 
     - name: install composer deps using composer.json
       community.general.composer:
@@ -207,8 +224,6 @@
         line: 'DocumentRoot /var/www/web/'
         backup: yes
 
-
-
     - name: Replace block of text
       ansible.builtin.replace:
         path: /etc/apache2/apache2.conf
@@ -217,12 +232,9 @@
         backup: yes
       become: true
 
-
-
     - name: Enable Apache rewrite module
       become: true
       command: a2enmod rewrite
-
 
     - name: Copy settings file
       copy:
@@ -257,13 +269,11 @@
         regexp: "@@@dbHost"
         replace: "{{ DB_HOST }}"
             
-
     - name: Copy theme(s)
       copy:
         src: "{{ git_dir }}/themes/"
         dest: "/var/www/web/themes/contrib/"    
 
-    
     - name: Restart apache
       service:
         name: apache2
@@ -314,9 +324,3 @@
         path: "{{ nfs_target_dir }}"
         mode: "0775"
         recurse: yes
-
-
-
-
-    
-    
