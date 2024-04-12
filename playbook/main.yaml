@@ -42,6 +42,10 @@
         path: "{{ nfs_target_dir }}"
         state: directory
       become: true
+
+    - name: Debug nfs_server variable
+      debug:
+        msg: "Value of nfs_server: {{ nfs_server }}:{{ nfs_share }}"
     
     - name: Mount NFS share
       mount:
