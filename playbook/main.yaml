@@ -50,10 +50,10 @@
 
     - name: Mount NFS share
       mount:
-        path: "{{ nfs_target_dir }}"
+        path: {{ nfs_target_dir }}
         src: "{{ nfs_server }}:{{ nfs_share }}"
         fstype: nfs
-        opts: "defaults,nofail"
+        opts: "rw,defaults,nofail"
         state: mounted
         dump: 0
         passno: 0
