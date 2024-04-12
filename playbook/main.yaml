@@ -71,7 +71,7 @@
         path: nfs_target_dir
         src: 192.168.11.20:/mnt/yes/gitbuilds/recursioncomic
         fstype: 'nfs'
-        opts: "rw,defaults,nofail"
+        opts: "defaults"
         state: mounted
         dump: 0
         passno: 0
