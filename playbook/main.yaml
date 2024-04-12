@@ -220,8 +220,8 @@
       become: true
       replace:
         path: /etc/apache2/apache2.conf
-        regexp: '(<Directory /var/www/>.*)AllowOverride None\n(.*</Directory>)'
-        replace: '\1\2'
+        regexp: '(<Directory /var/www/>.*)AllowOverride None(.*</Directory>)'
+        replace: ''
       notify: Restart Apache
 
 
