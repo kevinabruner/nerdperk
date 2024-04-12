@@ -22,6 +22,7 @@
         - vim
         - nfs-common
         - htop
+        - keepalived
       become: true
     
     - name: Enable apache2 service
