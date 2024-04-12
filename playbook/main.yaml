@@ -53,7 +53,7 @@
         path: "{{ nfs_target_dir }}"
         src: "{{ nfs_server }}:{{ nfs_share }}"
         fstype: nfs
-        opts: "defaults"
+        opts: "defaults,nofail"
         state: mounted
         dump: 0
         passno: 0
