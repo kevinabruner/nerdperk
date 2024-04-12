@@ -168,6 +168,18 @@
         state: restarted
       become: yes    
 
+    - name: remove uneeded prod IP from keepalived config
+      set_fact:
+        unassigned_ips: "{{ [prod1, prod2] | difference([ansible_default_ipv4.address]) }}"    
+      when:         
+        - "'prod' in group_names"
+
+    - name: remove uneeded dev IP from keepalived config
+      set_fact:
+        unassigned_ips: "{{ [dev1, dev2] | difference([ansible_default_ipv4.address]) }}"    
+      when:         
+        - "'dev' in group_names"
+
     - name: Replace @@@PEERS with unassigned IPs
       lineinfile:
         path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
