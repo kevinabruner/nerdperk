@@ -62,6 +62,7 @@
         group: www-data
         recurse: yes
         state: directory
+        force: yes  # Ensure the ownership is always changed
       become: yes
 
     - name: Create NFS mount point 
