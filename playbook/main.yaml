@@ -210,19 +210,18 @@
     - name: Update AllowOverride in Apache configuration
       become: true
       lineinfile:
-        path: /etc/apache2/apache2.conf
-        regexp: '(<Directory /var/www/>.*)AllowOverride None(.*</Directory>)'
+        path: /etc/apache2/apache2.conf        
         line: '        AllowOverride All'
         insertafter: '<Directory /var/www/>'
         backup: yes
 
     - name: Remove AllowOverride None from Apache configuration
-      become: true
       replace:
         path: /etc/apache2/apache2.conf
-        regexp: '(<Directory /var/www/>.*)AllowOverride None(.*</Directory>)'
-        replace: ''
-      notify: Restart Apache
+        regexp: '(<Directory /var/www/>\s+AllowOverride None\n\s+.*\n\s+</Directory>)'
+        replace: '\1'
+      become: true
+
 
 
 
