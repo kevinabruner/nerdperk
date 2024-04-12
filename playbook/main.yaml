@@ -236,7 +236,7 @@
         placeholders:
           - { pattern: '@@@dbName', replacement: "{{ dbName }}" }
           - { pattern: '@@@username', replacement: "{{ username }}" }
-          - { pattern: '@@@password', replacement: "{{ password }}" }
+          - { pattern: '@@@password', replacement: "{{ db_password }}" }
           - { pattern: '@@@dbHost', replacement: "{{ dbHost }}" }
         
 
