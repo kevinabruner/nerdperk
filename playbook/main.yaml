@@ -78,11 +78,7 @@
         line: "{{ nfs_server }}:{{ nfs_share }}    {{ nfs_target_dir }}    nfs    defaults    0 0"
         insertafter: EOF
       become: true
-
-    
-    - name: Mount NFS share
-      shell: mount -t nfs {{ nfs_server }}:{{ nfs_share }} {{ nfs_target_dir }}
-      become: true
+        
 
     - name: Copy keepalived script template
       copy:
