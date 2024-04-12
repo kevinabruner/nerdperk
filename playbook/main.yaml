@@ -79,12 +79,10 @@
         insertafter: EOF
       become: true
 
-    - name: Mount NFS share using shell
-      hosts: your_target_hosts
-      tasks:
-        - name: Mount NFS share
-          shell: mount -t nfs {{ nfs_server }}:{{ nfs_share }} {{ nfs_target_dir }}
-          become: true
+    
+    - name: Mount NFS share
+      shell: mount -t nfs {{ nfs_server }}:{{ nfs_share }} {{ nfs_target_dir }}
+      become: true
 
     - name: Copy keepalived script template
       copy:
