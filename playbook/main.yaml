@@ -63,14 +63,7 @@
         recurse: yes
         state: directory
         force: yes  # Ensure the ownership is always changed
-      become: yes
-
-    - name: Create NFS mount point 
-      file:
-        path: nfs_target_dir
-        state: directory
-      become_user: kevin:www-data
-           
+      become: yes               
 
     - name: Add NFS share entry to /etc/fstab
       lineinfile:
@@ -197,6 +190,12 @@
       copy:
         src: "{{ git_dir }}/composer.json"
         dest: "/var/www/"           
+
+    - name: Create NFS mount point 
+      file:
+        path: nfs_target_dir
+        state: directory
+      become_user: kevin:www-data
 
 
     - name: install composer deps using composer.json
