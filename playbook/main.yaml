@@ -67,7 +67,7 @@
 
     - name: Create NFS mount point 
       file:
-        path: "{{ nfs_target_dir }}"
+        path: "/var/www/web/sites/default/files/"
         state: directory
       become_user: kevin:www-data
 
@@ -78,7 +78,7 @@
 
     - name: Mount NFS share
       mount:
-        path: nfs_target_dir
+        path: /var/www/web/sites/default/files/
         src: "192.168.11.20:/mnt/yes/gitbuilds/recursioncomic"
         fstype: 'nfs'
         opts: "rw,defaults,nofail"
