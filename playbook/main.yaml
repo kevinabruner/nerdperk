@@ -78,7 +78,7 @@
 
     - name: Mount NFS share
       mount:
-        path: /var/www/web/sites/default/files/
+        path: /home/kevin/mount/
         src: "192.168.11.20:/mnt/yes/gitbuilds/recursioncomic"
         fstype: 'nfs'
         opts: "rw,defaults,nofail"
