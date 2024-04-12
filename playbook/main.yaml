@@ -68,7 +68,7 @@
 
     - name: Mount NFS share
       mount:
-        path: nfs_target_dir
+        path: "{{ nfs_target_dir }}"
         src: nas.jfkhome:/mnt/yes/gitbuilds/recursioncomic
         fstype: 'nfs'
         opts: "defaults"
