@@ -80,7 +80,7 @@
       mount:
         path: nfs_target_dir
         src: "{{ nfs_server }}:{{ nfs_share }}"
-        fstype: nfs
+        fstype: ''
         opts: "rw,defaults,nofail"
         state: mounted
         dump: 0
