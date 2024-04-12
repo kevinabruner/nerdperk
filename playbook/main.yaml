@@ -281,7 +281,8 @@
 
 
     - name: Run sudo mount -a
-        command: mount -a
+      become: true
+      command: mount -a
 
 
 
