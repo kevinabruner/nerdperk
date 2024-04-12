@@ -48,16 +48,16 @@
         msg: "Value of nfs_server: {{ nfs_server }}:{{ nfs_share }} on {{ nfs_target_dir }}"
     
     - name: Mount NFS share
-      mount:
-        path: "{{ nfs_target_dir }}"
+      mount:        
         src: "{{ nfs_server }}:{{ nfs_share }}"
+        path: "{{ nfs_target_dir }}"
         fstype: nfs
         opts: "rw"
         state: mounted
         dump: 0
         passno: 0
         fstab: yes          
-      become: true
+      
 
     - name: Copy keepalived script template
       copy:
