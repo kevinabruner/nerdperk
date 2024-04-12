@@ -46,17 +46,19 @@
     - name: Debug nfs_server variable
       debug:
         msg: "Value of nfs_server: {{ nfs_server }}:{{ nfs_share }} on {{ nfs_target_dir }}"
-    
+       
+
     - name: Mount NFS share
-      mount:        
-        src: "{{ nfs_server }}:{{ nfs_share }}"
+      mount:
         path: "{{ nfs_target_dir }}"
+        src: "{{ nfs_server }}:{{ nfs_share }}"
         fstype: nfs
-        opts: "rw"
+        opts: "defaults"
         state: mounted
         dump: 0
         passno: 0
-        fstab: yes          
+        fstab: yes
+      become: true
       
 
     - name: Copy keepalived script template
