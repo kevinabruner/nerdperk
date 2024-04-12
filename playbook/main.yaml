@@ -37,6 +37,17 @@
         enabled: yes
       become: true
 
+
+    - name: Ensure user kevin exists
+      user:
+        name: kevin
+        state: present
+
+    - name: Ensure group www-data exists
+      group:
+        name: www-data
+        state: present
+
     - name: Add user kevin to group www-data
       user:
         name: kevin
