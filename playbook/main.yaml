@@ -68,8 +68,8 @@
 
     - name: Mount NFS share
       mount:
-        path: /home/kevin/test
         src: nas.jfkhome:/mnt/yes/gitbuilds/recursioncomic
+        path: /home/kevin/test        
         fstype: 'nfs'
         opts: rw,hard,intr,proto=tcp,nfsvers=4.1
         state: mounted
