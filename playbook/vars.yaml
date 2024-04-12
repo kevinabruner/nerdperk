@@ -19,3 +19,6 @@ external_router: 181
 nfs_target_dir: /var/www/web/sites/default/files
 nfs_server: 192.168.11.20
 nfs_share: /mnt/yes/gitbuilds/recursioncomic/files
+dbName: "{{ APPLICATION }}"
+username: "{{ APPLICATION }}"
+db_password: obo74Cle

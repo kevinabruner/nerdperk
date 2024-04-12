@@ -205,6 +205,39 @@
         working_dir: /var/www
       become_user: kevin:www-data
 
+    - name: Update DocumentRoot in Apache configuration
+      become: true
+      lineinfile:
+        path: /etc/apache2/sites-enabled/000-default.conf
+        regexp: '^(\s*)DocumentRoot /var/www/html'
+        line: '\1DocumentRoot /var/www/web/'
+        backup: yes
+
+    - name: Update AllowOverride in Apache configuration
+      become: true
+      lineinfile:
+        path: /etc/apache2/apache2.conf
+        regexp: '(<Directory /var/www/>.*)AllowOverride None(.*</Directory>)'
+        line: '\1AllowOverride All\2'
+        backup: yes
+
+    - name: Enable Apache rewrite module
+      become: true
+      command: a2enmod rewrite
+
+
+    - name: Replace placeholders with actual values in settings.php
+      become: true
+      replace:
+        path: /path/to/settings.php
+        regexp: "{{ item.pattern }}"
+        replace: "{{ item.replacement }}"
+      vars:
+        placeholders:
+          - { pattern: '@@@dbName', replacement: "{{ dbName }}" }
+          - { pattern: '@@@username', replacement: "{{ username }}" }
+          - { pattern: '@@@password', replacement: "{{ db_password }}" }
+          - { pattern: '@@@dbHost', replacement: "{{ DB_HOST }}" }
 
 
     
