@@ -276,7 +276,7 @@
 
     - name: Create NFS mount point 
       file:
-        path: nfs_target_dir
+        path: /var/www/web/sites/default/files
         state: directory
       become: true
 
