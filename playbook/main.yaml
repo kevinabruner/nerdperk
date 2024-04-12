@@ -69,7 +69,7 @@
     - name: Mount NFS share
       ansible.posix.mount:
         src: nas.jfkhome:/mnt/yes/gitbuilds/recursioncomic
-        path: /home/kevin/test                
+        
         opts: default
         state: mounted
         fstype: nfs
