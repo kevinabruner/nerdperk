@@ -210,7 +210,7 @@
       lineinfile:
         path: /etc/apache2/sites-enabled/000-default.conf
         regexp: '^(\s*)DocumentRoot /var/www/html'
-        line: '\1DocumentRoot /var/www/web/'
+        line: 'DocumentRoot /var/www/web/'
         backup: yes
 
     - name: Update AllowOverride in Apache configuration
