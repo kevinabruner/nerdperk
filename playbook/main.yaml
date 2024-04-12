@@ -207,21 +207,14 @@
         line: 'DocumentRoot /var/www/web/'
         backup: yes
 
-    - name: Update AllowOverride in Apache configuration
-      become: true
-      lineinfile:
-        path: /etc/apache2/apache2.conf        
-        line: '        AllowOverride All'
-        insertafter: '<Directory /var/www/>'
+
+    - name: Replace apache conf
+      ansible.builtin.replace:
+        path: /etc/apache2/apache2.conf
+        regexp: "(<Directory /var/www/>)\n(\s+Options Indexes FollowSymLinks\n\s+AllowOverride) None(\n\s+Require all granted\n</Directory>)"
+        replace: "\1\n\2 All\3"
         backup: yes
 
-    - name: Remove AllowOverride None from Apache configuration
-      become: true
-      replace:
-        path: /etc/apache2/apache2.conf
-        regexp: '(<Directory /var/www/>.*)AllowOverride None\n(.*</Directory>)'
-        replace: '\1\2'
-      notify: Restart Apache
 
 
     - name: Enable Apache rewrite module
