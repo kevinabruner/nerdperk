@@ -162,17 +162,11 @@
         line: "  interface {{ INTERFACE }}"
       become: yes
 
-    - name: Restart nginx
+    - name: Restart apache
       service:
-        name: nginx
+        name: apache
         state: restarted
-      become: yes
-
-    - name: Restart keepalived
-      service:
-        name: keepalived
-        state: restarted
-      become: yes
+      become: yes    
 
     - name: Replace @@@PEERS with unassigned IPs
       lineinfile:
