@@ -55,6 +55,15 @@
         append: yes
       become: yes
 
+    - name: Set ownership of /var/www recursively
+      file:
+        path: /var/www
+        owner: kevin
+        group: www-data
+        recurse: yes
+        state: directory
+      become: yes
+
     - name: Create NFS mount point 
       file:
         path: "{{ nfs_target_dir }}"
