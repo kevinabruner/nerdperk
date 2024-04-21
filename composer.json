@@ -46,6 +46,7 @@
         "drupal/youtube": "^2.0",
         "drupal/symfony_mailer":"^1.4",
         "drush/drush": "^12.5",
+        "drupal/smtp": "^1.2",
         "drupal/webform":"^6.2"
 
     },
