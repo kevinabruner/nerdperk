@@ -1,6 +1,6 @@
 - name: Build 
   hosts: nerdperk
-  serial: 1
+  #serial: 1
   vars_files:
     - vars.yaml
   tasks:                
@@ -24,6 +24,7 @@
         - nfs-common
         - htop
         - keepalived
+        - sendmail
       become: true
     
     - name: Enable apache2 service
@@ -217,6 +218,12 @@
         working_dir: /var/www
       become_user: kevin:www-data
 
+    - name: update composer, if needed
+      community.general.composer:
+        command: update
+        working_dir: /var/www
+      become_user: kevin:www-data
+
     - name: Update DocumentRoot in Apache configuration
       become: true
       lineinfile:
@@ -292,6 +299,13 @@
         path: /var/www/web/sites/default/files
         state: directory
       become: true
+
+    - name: Create config sync
+      file:
+        path: /var/www/sync
+        state: directory
+      become: true
+
 
     - name: Run sudo mount -a
       become: true
