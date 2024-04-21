@@ -300,6 +300,13 @@
         state: directory
       become: true
 
+    - name: Create config sync
+      file:
+        path: /var/www/sync
+        state: directory
+      become: true
+
+
     - name: Run sudo mount -a
       become: true
       command: mount -a
