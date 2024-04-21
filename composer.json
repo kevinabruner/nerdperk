@@ -43,7 +43,8 @@
         "drupal/rdf": "^2.1",
         "drupal/seven": "^1.0",
         "drupal/token": "^1.13",
-        "drupal/youtube": "^2.0"
+        "drupal/youtube": "^2.0",
+        "drupal/symfony_mailer":"^1.4"
     },
     "conflict": {
         "drupal/drupal": "*"
