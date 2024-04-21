@@ -1,6 +1,6 @@
 - name: Build 
   hosts: nerdperk
-  serial: 1
+  #serial: 1
   vars_files:
     - vars.yaml
   tasks:                
