@@ -45,7 +45,8 @@
         "drupal/token": "^1.13",
         "drupal/youtube": "^2.0",
         "drupal/symfony_mailer":"^1.4",
-        "drush/drush": "^12.5"
+        "drush/drush": "^12.5",
+        "drupal/webform":"^6.2"
 
     },
     "conflict": {
