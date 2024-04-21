@@ -218,6 +218,12 @@
         working_dir: /var/www
       become_user: kevin:www-data
 
+    - name: update composer, if needed
+      community.general.composer:
+        command: update
+        working_dir: /var/www
+      become_user: kevin:www-data
+
     - name: Update DocumentRoot in Apache configuration
       become: true
       lineinfile:
