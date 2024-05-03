@@ -188,7 +188,15 @@ h1:after{
   height:auto;
   width:auto;
   max-width:100%;  
-  }
+}
+
+.pagination li a{
+  color:darkred;  
+}
+.pagination li.selected a{
+  background-color:darkred;  
+  border-color:black;
+}
   
 @media only screen and (min-width: 1800px) {
 
