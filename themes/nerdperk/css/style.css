@@ -207,9 +207,7 @@ h1:after{
   }
 }
 @media only screen and (max-width: 1199px) {
-  #home-page-image{
-    margin-top:25px;
-  }
+
   #navbar a {
     font-size:15pt
   }
@@ -259,6 +257,12 @@ h1:after{
 }
 
 @media all and (max-width: 991px) {
+  #home-page-image{
+    margin-top:25px;
+  }
+  #welcome-text {
+    font-size:1.2em;
+  }
   .all-vids{
      flex-basis:50%
   }  
