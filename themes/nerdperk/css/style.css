@@ -183,6 +183,13 @@ h1:after{
     text-align:center;
     margin-top:25px;
 }
+
+.content img{
+  height:auto;
+  width:auto;
+ max-width:100%;
+  
+}
  
 @media only screen and (min-width: 1800px) {
 
