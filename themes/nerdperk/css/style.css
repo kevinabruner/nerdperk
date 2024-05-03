@@ -257,7 +257,7 @@ h1:after{
 }
 
 @media all and (max-width: 991px) {
-  #home-page-image{
+  #home-image{
     margin-top:25px;
   }
   #welcome-text {
