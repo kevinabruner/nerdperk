@@ -183,7 +183,21 @@ h1:after{
     text-align:center;
     margin-top:25px;
 }
- 
+
+#home-image{
+  height:auto;
+  width:auto;
+  max-width:100%;  
+}
+
+.pagination li a{
+  color:darkred;  
+}
+.pagination li.selected a{
+  background-color:darkred;  
+  border-color:black;
+}
+  
 @media only screen and (min-width: 1800px) {
 
   .container,
@@ -193,9 +207,7 @@ h1:after{
   }
 }
 @media only screen and (max-width: 1199px) {
-  #home-page-image{
-    margin-top:25px;
-  }
+
   #navbar a {
     font-size:15pt
   }
@@ -245,6 +257,12 @@ h1:after{
 }
 
 @media all and (max-width: 991px) {
+  #home-image{
+    margin-top:25px;
+  }
+  #welcome-text {
+    font-size:1.2em;
+  }
   .all-vids{
      flex-basis:50%
   }  
