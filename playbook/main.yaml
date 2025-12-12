@@ -16,6 +16,7 @@
         - php-pdo
         - php-mysql
         - php-dom
+        - php-mbstring
         - php-curl
         - ncdu
         - gh        
