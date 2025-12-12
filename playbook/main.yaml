@@ -18,14 +18,23 @@
         - php-dom
         - php-curl
         - ncdu
-        - gh
-        - composer
+        - gh        
         - vim
         - nfs-common
-        - htop
-        - keepalived
-        - sendmail
+        - htop                
       become: true
+
+    - name: Setting internal/dev IP
+      set_fact:
+        DB_HOST: "{{ dev_db }}"  
+      when:         
+        - "'dev' in group_names"
+    
+    - name: Setting external/prod IP
+      set_fact:
+        DB_HOST: "{{ prod_db }}"  
+      when:         
+        - "'prod' in group_names"  
     
     - name: Enable apache2 service
       systemd:
@@ -33,11 +42,11 @@
         enabled: yes
       become: true
 
-    - name: Enable keepalived service
-      systemd:
-        name: keepalived
-        enabled: yes
-      become: true
+    - name: Stop apache
+      service:
+        name: apache2
+        state: stopped
+      become: yes    
 
     - name: Ensure user kevin exists
       user:
@@ -56,173 +65,76 @@
         append: yes
       become: yes
 
-    - name: Set ownership of /var/www recursively
-      file:
-        path: /var/www
-        owner: kevin
-        group: www-data
-        recurse: yes
-        state: directory
-        force: yes  # Ensure the ownership is always changed
-      become: yes               
-
     - name: Add NFS share entry to /etc/fstab
       lineinfile:
         path: /etc/fstab
         line: "{{ nfs_server }}:{{ nfs_share }}    {{ nfs_target_dir }}    nfs    defaults    0 0"
         insertafter: EOF
-      become: true
-        
-    - name: Copy keepalived script template
-      copy:
-        src: "{{ git_dir }}/{{ keepalived_conf }}"
-        dest: "{{ keepalived_dir }}"
-      become: true          
+      become: true                           
 
-    - name: Extract last digit of IP address
-      set_fact:
-        last_digit: "{{ ansible_default_ipv4.address.split('.')[-1] | int }}"
+    - name: Remove local build directory if it exists
+      delegate_to: localhost
+      ansible.builtin.file:
+        path: "{{ git_dir }}/.build"
+        state: absent
+      run_once: true
 
-    - name: Master configuration
-      set_fact:
-        ROLE: "MASTER"
-        PRIORITY: 110
-      when: "(last_digit | int) % 2 != 0"    
+    - name: Ensure .build directory exists locally
+      delegate_to: localhost
+      ansible.builtin.file:
+        path: "{{ git_dir }}/.build"
+        state: directory
+        mode: "0755"
+      run_once: true
 
-    - name: Backup configuration
-      set_fact:
-        ROLE: "BACKUP"        
-        PRIORITY: 100
-      when: "(last_digit | int) % 2 == 0"    
-    
-    - name: Display roles for the host
-      debug:
-        var: group_names
-
-    - name: Setting internal/dev IP
-      set_fact:
-        VIRT_IP: "{{ internal_vip }}"  
-        ROUTER_ID: "{{ internal_router }}"      
-        DB_HOST: "{{ dev_db }}"  
-      when:         
-        - "'dev' in group_names"
-    
-    - name: Setting external/prod IP
-      set_fact:
-        VIRT_IP: "{{ external_vip }}"
-        ROUTER_ID: "{{ external_router }}"        
-        DB_HOST: "{{ prod_db }}"  
-      when:         
-        - "'prod' in group_names"      
-
-    - name: Setting external/prod IP
-      set_fact:
-        VIRT_IP: "{{ external_vip }}"
-        ROUTER_ID: "{{ external_router }}"        
-        DB_HOST: "{{ prod_db }}"  
-      when:         
-        - "'prod' in group_names"                  
-
-    - name: Setting peer IP for odd last digit in 'prod' group
-      set_fact:
-        peer_ip: "{{ prod1 }}"
-      when: 
-        - (last_digit | int) % 2 != 0
-        - "'prod' in group_names"
-
-    - name: Setting peer IP for even last digit in 'prod' group
-      set_fact:
-        peer_ip: "{{ prod2 }}"
-      when: 
-        - (last_digit | int) % 2 == 0
-        - "'prod' in group_names"
-
-    - name: Setting peer IP for odd last digit in 'dev' group
-      set_fact:
-        peer_ip: "{{ dev1 }}"
-      when: 
-        - (last_digit | int) % 2 != 0
-        - "'dev' in group_names"
-
-    - name: Setting peer IP for even last digit in 'dev' group
-      set_fact:
-        peer_ip: "{{ dev2 }}"
-      when: 
-        - (last_digit | int) % 2 == 0
-        - "'dev' in group_names"
-
-    - name: Replace "@@@MASTER_OR_SLAVE" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes        
-        regexp: '^.*@@@MASTER_OR_SLAVE.*$'
-        line: "  state {{ ROLE }}"  
-      become: yes
-
-    - name: Replace "@@@ROUTER_ID" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes        
-        regexp: '^.*@@@ROUTER_ID.*$'
-        line: "  virtual_router_id {{ ROUTER_ID }}"  
-      become: yes 
-
-    - name: Replace "@@@VIRT_IP" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes
-        regexp: '^.*@@@VIRT_IP.*$'
-        line: "    {{ VIRT_IP }}/24"
-      become: yes
-
-    - name: Replace "@@@PRIORITY" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes
-        regexp: '^.*@@@PRIORITY.*$'
-        line: "  priority {{ PRIORITY }}"
-      become: yes
-
-    - name: Replace @@@PEERS with unassigned IP
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        regexp: '^.*@@@PEERS.*$'
-        line: "    {{ peer_ip }}"
-        backrefs: yes
-      become: yes
-
-    - name: Replace "@@@INTERFACE" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes
-        regexp: '^.*@@@INTERFACE.*$'
-        line: "  interface {{ INTERFACE }}"
-      become: yes
-
-    - name: Replace "@@@SRC_IP" in file
-      lineinfile:
-        path: "{{ keepalived_dir }}/{{ keepalived_conf }}"
-        backrefs: yes        
-        regexp: '^.*@@@SRC_IP.*$'
-        line: "  unicast_src_ip {{ ansible_default_ipv4.address }}"  
-      become: yes
-
-    - name: Copy keepalived script template
+    - name: Copy composer file
+      delegate_to: localhost
       copy:
         src: "{{ git_dir }}/composer.json"
-        dest: "/var/www/"           
+        dest: "{{ git_dir }}/.build/composer.json" 
+      run_once: true
 
-    - name: install composer deps using composer.json
+    - name: run composer project locally
+      delegate_to: localhost
       community.general.composer:
         command: install
-        working_dir: /var/www
-      become_user: kevin:www-data
+        working_dir: "{{ git_dir }}/.build"
+      run_once: true   
+    
+    - name: unmount nfs
+      become: true
+      command: umount -t nfs /var/www/web/sites/default/files
+      ignore_errors: yes
 
-    - name: update composer, if needed
-      community.general.composer:
-        command: update
-        working_dir: /var/www
-      become_user: kevin:www-data
+    - name: Remove web directory if it exists
+      become: true
+      ansible.builtin.file:
+        path: "/var/www/web/"
+        state: absent
+      run_once: true
+
+    - name: Create config sync
+      file:
+        path: /var/www/sync
+        state: directory
+      become: true
+
+    - name: Sync "web" to server
+      ansible.posix.synchronize:
+        src: "{{ git_dir }}/.build/web"
+        dest: /var/www/
+        rsync_opts:
+          - "--delete-after"
+          - "--exclude=sites/default/files"
+          - "--exclude=sites/default/settings.php"
+      become: true
+
+    - name: Sync "vendor" to server
+      ansible.posix.synchronize:
+        src: "{{ git_dir }}/.build/vendor"
+        dest: /var/www/
+        delete: yes
+      become: true   
 
     - name: Update DocumentRoot in Apache configuration
       become: true
@@ -232,7 +144,7 @@
         line: 'DocumentRoot /var/www/web/'
         backup: yes
 
-    - name: Replace block of text
+    - name: Replace Apache options for symlinks
       ansible.builtin.replace:
         path: /etc/apache2/apache2.conf
         regexp: "(<Directory /var/www/>)\\n(\\s+Options Indexes FollowSymLinks\\n\\s+AllowOverride) None(\\n\\s+Require all granted\\n</Directory>)"
@@ -245,6 +157,7 @@
       command: a2enmod rewrite
 
     - name: Copy settings file
+      become: true
       copy:
         src: "{{ git_dir }}/settings.php"
         dest: "/var/www/web/sites/default/"    
@@ -282,17 +195,13 @@
         src: "{{ git_dir }}/themes/"
         dest: "/var/www/web/themes/contrib/"    
 
-    - name: Restart apache
-      service:
-        name: apache2
-        state: restarted
-      become: yes    
-
-    - name: Restart keepalived
-      service:
-        name: keepalived
-        state: restarted
-      become: yes
+    - name: Set ownership to www-data on target web dir
+      ansible.builtin.file:
+        path: /var/www/
+        owner: www-data
+        group: www-data
+        recurse: yes
+      become: true        
 
     - name: Create NFS mount point 
       file:
@@ -300,16 +209,9 @@
         state: directory
       become: true
 
-    - name: Create config sync
-      file:
-        path: /var/www/sync
-        state: directory
+    - name: Mount all NFS shares
       become: true
-
-
-    - name: Run sudo mount -a
-      become: true
-      command: mount -a
+      command: mount -a    
 
     # - name: Run drush cache refresh
     #   become: true
@@ -325,7 +227,7 @@
     #     chdir: "/var/www"
     #   become_user: kevin:www-data
 
-    - name: Change ownership recursively
+    - name: Change ownership recursively on NFS
       become: true
       file:
         path: "{{ nfs_target_dir }}"
@@ -333,9 +235,15 @@
         group: "www-data"
         recurse: yes
 
-    - name: Change permissions recursively
+    - name: Change permissions recursively on NFS
       become: true
       file:
         path: "{{ nfs_target_dir }}"
         mode: "0775"
         recurse: yes
+    
+    - name: Start apache
+      service:
+        name: apache2
+        state: started
+      become: yes    
