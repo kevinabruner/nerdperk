@@ -20,7 +20,7 @@ def get_netbox_data(endpoint):
 def generate_inventory():
     inventory = {
         "_meta": {"hostvars": {}},
-        "all": {"children": ["db_server", "dev", "prod"]},
+        "all": {"children": [TARGET_REPO, "dev", "prod"]},
         "db_server": {"hosts": []},
         "dev": {"hosts": [], "vars": {}}, 
         "prod": {"hosts": [], "vars": {}} 
