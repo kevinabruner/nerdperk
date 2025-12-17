@@ -57,11 +57,12 @@
         template_name: "{{ APPLICATION }}-golden"
         template_vmid: "{{ hostvars[target_vm]['proxmox_vmid'] }}0"
 
-    - name: Sanitize via Guest Agent (Targeting VMID, not IP)
-      shell: |
-        pvesh create /nodes/{{ inventory_hostname }}/qemu/{{ template_vmid }}/agent/exec --command "cloud-init clean --logs"
-        pvesh create /nodes/{{ inventory_hostname }}/qemu/{{ template_vmid }}/agent/exec --command "truncate -s 0 /etc/machine-id"
-        pvesh create /nodes/{{ inventory_hostname }}/qemu/{{ template_vmid }}/agent/exec --command "rm -f /etc/ssh/ssh_host_*"
+    - name: Sanitize via Guest Agent
+      shell: "qm guest exec {{ template_vmid }} -- /bin/sh -c '{{ item }}'"
+      loop:
+        - "cloud-init clean --logs"
+        - "truncate -s 0 /etc/machine-id"
+        - "rm -f /etc/ssh/ssh_host_*"
 
     - name: Shutdown the clone
       community.general.proxmox_kvm:
