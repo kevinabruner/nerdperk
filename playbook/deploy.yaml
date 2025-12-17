@@ -102,14 +102,6 @@
         delete: yes
       become: true   
 
-    - name: Update DocumentRoot in Apache configuration
-      become: true
-      lineinfile:
-        path: /etc/apache2/sites-available/000-default.conf
-        regexp: '^(\s*)DocumentRoot /var/www/html'
-        line: 'DocumentRoot /var/www/web/'
-        backup: yes
-
     - name: Replace Apache options for symlinks
       ansible.builtin.replace:
         path: /etc/apache2/apache2.conf
@@ -151,18 +143,12 @@
       become: true
       command: mount -a    
 
-    - name: Change ownership recursively on NFS
+    - name: Set ownership and permissions recursively on NFS
       become: true
-      file:
+      ansible.builtin.file:
         path: "{{ nfs_target_dir }}"
-        owner: "{{ ANSIBLE_USER }}"
+        owner: "www-data"
         group: "www-data"
-        recurse: yes
-
-    - name: Change permissions recursively on NFS
-      become: true
-      file:
-        path: "{{ nfs_target_dir }}"
         mode: "0775"
         recurse: yes
     
