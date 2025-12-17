@@ -25,26 +25,23 @@
         - nfs-common
         - htop   
         - keepalived
-        - haproxy             
       become: true
     
-    - name: Enable apache2 haproxy and keepalived
+    - name: Enable apache2 and keepalived
       ansible.builtin.systemd:
         name: "{{ item }}"
         enabled: yes
       loop:
         - apache2
-        - haproxy 
         - keepalived
       become: true
 
-    - name: Stop apache2 haproxy and keepalived
+    - name: Stop apache2 and keepalived
       ansible.builtin.service:
         name: "{{ item }}"
         state: stopped
       loop:
         - apache2
-        - haproxy
         - keepalived
       become: true 
 
@@ -53,12 +50,6 @@
       template:
         src: "{{ git_dir }}/templates/keepalived.conf.j2"
         dest: "/etc/keepalived/keepalived.conf"
-
-    - name: Copy the haproxy config file
-      template:
-        src: "{{ git_dir }}/templates/haproxy.cfg.j2"
-        dest: "/etc/haproxy/haproxy.cfg"
-      become: true   
 
     - name: Ensure user kevin exists
       user:
@@ -226,13 +217,12 @@
         mode: "0775"
         recurse: yes
     
-    - name: Start apache haproxy and keepalived
+    - name: Start apache and keepalived
       ansible.builtin.systemd:
         name: "{{ item }}"
         enabled: yes
         state: started
       loop:
         - apache2
-        - haproxy
         - keepalived
       become: true
