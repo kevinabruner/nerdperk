@@ -67,14 +67,14 @@
         state: directory
       become: true
 
-    - name: Sync Drupal build (web and vendor) to server
+    - name: Sync Drupal build (html and vendor) to server
       ansible.posix.synchronize:
         src: "{{ git_dir }}/.build/"
         dest: /var/www/
         delete: yes
         rsync_opts:
           - "--delete-after"
-          - "--include=web/**"
+          - "--include=html/**"
           - "--include=vendor/**"
           - "--exclude=sites/default/files"
           - "--exclude=sites/default/settings.php"
