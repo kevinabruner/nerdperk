@@ -1,29 +1,3 @@
-- name: Prepare template for prod deployment
-  hosts: "{{ target_vm }}"  
-  vars_files:
-    - vars.yaml
-    - vault.yaml
-  become: true
-  tasks:
-    - name: Clean Cloud-Init and machine-id
-      shell: |
-        # Remove unique SSH keys
-        rm -f /etc/ssh/ssh_host_*
-        # Clear machine-id so it regenerates on next boot
-        truncate -s 0 /etc/machine-id
-        rm -f /var/lib/dbus/machine-id
-        ln -s /etc/machine-id /var/lib/dbus/machine-id
-        # Clean cloud-init logs and data
-        cloud-init clean --logs
-      args:
-        executable: /bin/bash
-
-    - name: Shut down the VM
-      shell: "shutdown -h now"
-      async: 1
-      poll: 0
-      ignore_unreachable: true
-
 - name: Create Production Template from Dev VM
   hosts: proxmox
   vars:
