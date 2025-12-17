@@ -4,15 +4,15 @@
     vars_files:
     - vars.yaml
     - vault.yaml
-    dev_vmid: "{{ hostvars[target_vm]['proxmox_vmid'] }}"
-    template_vmid: "{{ hostvars[target_vm]['proxmox_vmid'] }}0"
-    template_name: "{{ APPLICATION }}-golden"
 
   tasks:
     - name: Create local shortcuts for VM variables
       set_fact:
         vm_id: "{{ hostvars[target_vm]['proxmox_vmid'] }}"
         vm_app: "{{ hostvars[target_vm]['APPLICATION'] }}"
+        template_name: "{{ hostvars[target_vm]['APPLICATION'] }}-golden"
+        template_vmid: "{{ hostvars[target_vm]['proxmox_vmid'] }}0"
+        dev_vmid: "{{ hostvars[target_vm]['proxmox_vmid'] }}"
 
     - name: Clone Dev VM to a new Template ID
       shell: "qm clone {{ vm_id }} {{ template_vmid }} --full --name {{ vm_app }}-golden"
