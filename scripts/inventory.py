@@ -37,7 +37,7 @@ def generate_inventory():
         repo = cf.get('repos_ip')
         env = cf.get('DevorProdIP') # 'dev' or 'prod'
         
-        if repo == "db-server" and env in inventory:
+        if repo == TARGET_REPO and env in inventory:
             # Clean the IP (remove /24)
             clean_ip = ip['address'].split('/')[0]
             inventory[env]["vars"]["vip"] = clean_ip
