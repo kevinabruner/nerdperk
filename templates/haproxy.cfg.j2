@@ -18,7 +18,7 @@ defaults
 
 # 1. WEB FRONTEND (Port 80 only)
 frontend drupal_frontend
-    bind {{ vip }}:80
+    bind 0.0.0.0:80
     
     # Capture the real IP passed from your upstream SSL proxy
     option forwardfor
