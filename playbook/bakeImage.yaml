@@ -55,28 +55,28 @@
         host: "{{ hostvars[target_vm]['ansible_host'] }}" # Assumes same IP for a moment
         timeout: 60
 
-    - name: Sanitize the Clone
-      hosts: "{{ target_vm }}" # Here we SSH into the CLONE (temporary)
-      become: true
-      tasks:
-        - name: Clean Cloud-Init and machine-id
-          shell: |
-            cloud-init clean --logs
-            truncate -s 0 /etc/machine-id
-            rm -f /etc/ssh/ssh_host_*
+- name: Sanitize the Clone
+  hosts: "{{ target_vm }}" # Here we SSH into the CLONE (temporary)
+  become: true
+  tasks:
+    - name: Clean Cloud-Init and machine-id
+      shell: |
+        cloud-init clean --logs
+        truncate -s 0 /etc/machine-id
+        rm -f /etc/ssh/ssh_host_*
 
-        - name: Power off the clone
-          shell: "shutdown -h now"
-          async: 1
-          poll: 0
+    - name: Power off the clone
+      shell: "shutdown -h now"
+      async: 1
+      poll: 0
 
-    - name: Convert Clone to Template
-      hosts: proxmox_nodes
-      tasks:
-        - name: Wait for Clone to stop
-          pause:
-            seconds: 15
+- name: Convert Clone to Template
+  hosts: proxmox_nodes
+  tasks:
+    - name: Wait for Clone to stop
+      pause:
+        seconds: 15
 
-        - name: Finalize conversion to Template
-          shell: "qm template {{ template_vmid }}"
+    - name: Finalize conversion to Template
+      shell: "qm template {{ template_vmid }}"
 
