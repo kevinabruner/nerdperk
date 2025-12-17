@@ -23,8 +23,7 @@ $databases['default']['default'] = array (
   'username' => '{{ APPLICATION }}',
   'password' => '{{ db_password }}',
   'prefix' => '',
-  'host' => '{{ vip }}',
-  'port' => '3306',
+  'host' => 'db-{{ (group_names | intersect(["dev", "prod"]) | first) }}.jfkhome',  'port' => '3306',
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
 );
