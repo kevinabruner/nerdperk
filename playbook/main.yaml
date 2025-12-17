@@ -1,8 +1,9 @@
 - name: Build 
-  hosts: nerdperk
+  hosts: all
   #serial: 1
   vars_files:
     - vars.yaml
+    - vault.yaml
   tasks:                
     - name: Install apt packages
       apt:
@@ -22,32 +23,33 @@
         - gh        
         - vim
         - nfs-common
-        - htop                
+        - htop   
+        - keepalived
       become: true
-
-    - name: Setting internal/dev IP
-      set_fact:
-        DB_HOST: "{{ dev_db }}"  
-      when:         
-        - "'dev' in group_names"
     
-    - name: Setting external/prod IP
-      set_fact:
-        DB_HOST: "{{ prod_db }}"  
-      when:         
-        - "'prod' in group_names"  
-    
-    - name: Enable apache2 service
-      systemd:
-        name: apache2
+    - name: Enable apache2 and keepalived
+      ansible.builtin.systemd:
+        name: "{{ item }}"
         enabled: yes
+      loop:
+        - apache2
+        - keepalived
       become: true
 
-    - name: Stop apache
-      service:
-        name: apache2
+    - name: Stop apache2 and keepalived
+      ansible.builtin.service:
+        name: "{{ item }}"
         state: stopped
-      become: yes    
+      loop:
+        - apache2
+        - keepalived
+      become: true 
+
+    - name: Copy keepalived configuration file
+      become: true
+      template:
+        src: "{{ git_dir }}/templates/keepalived.conf.j2"
+        dest: "/etc/keepalived/keepalived.conf"
 
     - name: Ensure user kevin exists
       user:
@@ -157,39 +159,11 @@
       become: true
       command: a2enmod rewrite
 
-    - name: Copy settings file
+    - name: Copy php settings file
       become: true
-      copy:
-        src: "{{ git_dir }}/settings.php"
-        dest: "/var/www/web/sites/default/"    
-
-    - name: Replace dbName placeholder with actual value in settings.php
-      become: true
-      replace:
-        path: /var/www/web/sites/default/settings.php
-        regexp: "@@@dbName"
-        replace: "{{ dbName }}"
-
-    - name: Replace username placeholder with actual value in settings.php
-      become: true
-      replace:
-        path: /var/www/web/sites/default/settings.php
-        regexp: "@@@username"
-        replace: "{{ username }}"
-
-    - name: Replace password placeholder with actual value in settings.php
-      become: true
-      replace:
-        path: /var/www/web/sites/default/settings.php
-        regexp: "@@@password"
-        replace: "{{ db_password }}"
-
-    - name: Replace dbHost placeholder with actual value in settings.php
-      become: true
-      replace:
-        path: /var/www/web/sites/default/settings.php
-        regexp: "@@@dbHost"
-        replace: "{{ DB_HOST }}"
+      template:
+        src: "{{ git_dir }}/templates/settings.php.j2"
+        dest: "/var/www/web/sites/default/settings.php"     
             
     - name: Copy theme(s)
       copy:
@@ -243,8 +217,12 @@
         mode: "0775"
         recurse: yes
     
-    - name: Start apache
-      service:
-        name: apache2
+    - name: Start apache and keepalived
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: yes
         state: started
-      become: yes    
+      loop:
+        - apache2
+        - keepalived
+      become: true
