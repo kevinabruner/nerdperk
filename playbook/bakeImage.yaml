@@ -43,12 +43,12 @@
     #     vmid: "{{ template_vmid }}"
     #     state: started
 
-    - name: Wait for Guest Agent to respond
-      shell: "qm guest exec {{ template_vmid }} uptime"
-      register: agent_ready
-      until: agent_ready.rc == 0
-      retries: 15
-      delay: 10
+    # - name: Wait for Guest Agent to respond
+    #   shell: "qm guest exec {{ template_vmid }} uptime"
+    #   register: agent_ready
+    #   until: agent_ready.rc == 0
+    #   retries: 15
+    #   delay: 10
 
     - name: Sanitize via Guest Agent (Targeting VMID, not IP)
       shell: |
