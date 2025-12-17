@@ -19,11 +19,11 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 $settings['hash_salt'] = 'thisiskindrandomiguess';
 
 $databases['default']['default'] = array (
-  'database' => '@@@dbName',
-  'username' => '@@@username',
-  'password' => '@@@password',
+  'database' => '{{ APPLICATION }}',
+  'username' => '{{ APPLICATION }}',
+  'password' => '{{ db_password }}',
   'prefix' => '',
-  'host' => '@@@dbHost',
+  'host' => '{{ vip }}',
   'port' => '3306',
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
