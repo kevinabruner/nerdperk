@@ -22,9 +22,6 @@ frontend drupal_frontend
     
     # Capture the real IP passed from your upstream SSL proxy
     option forwardfor
-    
-    # Tell Drupal the traffic was originally HTTPS (if the upstream proxy sends this)
-    http-request set-header X-Forwarded-Proto https if { hdr(X-Forwarded-Proto) https }
 
     default_backend drupal_nodes
 
