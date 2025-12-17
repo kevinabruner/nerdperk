@@ -11,6 +11,7 @@
         # This comes from your loaded vars.yaml (available locally)
         vm_app: "{{ APPLICATION }}" 
         template_name: "{{ APPLICATION }}-golden"
+        template_vmid: "{{ hostvars[target_vm]['proxmox_vmid'] }}0"
 
     - name: Clone Dev VM to a new Template ID
       shell: "qm clone {{ vm_id }} {{ template_vmid }} --full --name {{ vm_app }}-golden"
