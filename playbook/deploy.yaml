@@ -85,22 +85,19 @@
         state: directory
       become: true
 
-    - name: Sync "web" to server
+    - name: Sync Drupal build (web and vendor) to server
       ansible.posix.synchronize:
-        src: "{{ git_dir }}/.build/web"
-        dest: /var/www/
-        rsync_opts:
-          - "--delete-after"
-          - "--exclude=sites/default/files"
-          - "--exclude=sites/default/settings.php"
-      become: true
-
-    - name: Sync "vendor" to server
-      ansible.posix.synchronize:
-        src: "{{ git_dir }}/.build/vendor"
+        src: "{{ git_dir }}/.build/"
         dest: /var/www/
         delete: yes
-      become: true   
+        rsync_opts:
+          - "--delete-after"
+          - "--include=web/**"
+          - "--include=vendor/**"
+          - "--exclude=sites/default/files"
+          - "--exclude=sites/default/settings.php"
+          - "--exclude=*"
+      become: true
 
     - name: Replace Apache options for symlinks
       ansible.builtin.replace:
