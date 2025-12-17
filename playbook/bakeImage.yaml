@@ -1,7 +1,9 @@
 - name: Create Production Template from Dev VM
   hosts: proxmox
   vars:
-    # These would ideally come from your inventory or -e "target_vm=..."
+    vars_files:
+    - vars.yaml
+    - vault.yaml
     dev_vmid: "{{ hostvars[target_vm]['proxmox_vmid'] }}"
     template_vmid: "{{ hostvars[target_vm]['proxmox_vmid'] }}0"
     template_name: "{{ APPLICATION }}-golden"
