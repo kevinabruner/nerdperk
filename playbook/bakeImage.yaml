@@ -44,11 +44,11 @@
     #     state: started
 
     - name: Wait for Guest Agent to respond
-      shell: "pvesh get /nodes/{{ inventory_hostname }}/qemu/{{ template_vmid }}/agent/ping"
-      register: agent_ping
-      until: agent_ping.rc == 0
-      retries: 10
-      delay: 5
+      shell: "pvesh get /nodes/{{ inventory_hostname }}/qemu/{{ template_vmid }}/agent/info"
+      register: agent_info
+      until: agent_info.rc == 0
+      retries: 20
+      delay: 10
 
     - name: Sanitize via Guest Agent (Targeting VMID, not IP)
       shell: |
