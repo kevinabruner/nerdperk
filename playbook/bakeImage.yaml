@@ -28,20 +28,20 @@
     #     - name: Destroy old template
     #       shell: "qm destroy {{ template_vmid }} --purge"
     
-    - name: Clone Dev VM to a new Template ID
-      shell: "qm clone {{ vm_id }} {{ template_vmid }} --full --name {{ template_name }}"
+    # - name: Clone Dev VM to a new Template ID
+    #   shell: "qm clone {{ vm_id }} {{ template_vmid }} --full --name {{ template_name }}"
 
-    - name: Ensure Guest Agent is enabled on clone
-      shell: "qm set {{ template_vmid }} --agent 1"
+    # - name: Ensure Guest Agent is enabled on clone
+    #   shell: "qm set {{ template_vmid }} --agent 1"
 
-    - name: Start the cloned VM
-      community.general.proxmox_kvm:
-        api_user: "{{ proxmox_api_user }}"
-        api_token_id: "{{ proxmox_token_id }}"
-        api_token_secret: "{{ proxmox_token_secret }}"
-        api_host: "{{ inventory_hostname }}"
-        vmid: "{{ template_vmid }}"
-        state: started
+    # - name: Start the cloned VM
+    #   community.general.proxmox_kvm:
+    #     api_user: "{{ proxmox_api_user }}"
+    #     api_token_id: "{{ proxmox_token_id }}"
+    #     api_token_secret: "{{ proxmox_token_secret }}"
+    #     api_host: "{{ inventory_hostname }}"
+    #     vmid: "{{ template_vmid }}"
+    #     state: started
 
     - name: Wait for Guest Agent to respond
       shell: "pvesh get /nodes/{{ inventory_hostname }}/qemu/{{ template_vmid }}/agent/ping"
