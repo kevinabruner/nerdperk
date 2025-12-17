@@ -36,7 +36,7 @@ backend drupal_nodes
     
     {% set env_group = group_names | intersect(['dev', 'prod']) | first %}
     {% for host in groups[env_group] %}
-    server {{ host }} {{ hostvars[host]['ansible_host'] }}:81 check cookie {{ host }}
+    server {{ host }} {{ hostvars[host]['ansible_host'] }}:80 check cookie {{ host }}
     {% endfor %}
 
 listen webinterface
