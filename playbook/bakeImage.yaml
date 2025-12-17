@@ -9,8 +9,13 @@
     template_name: "{{ APPLICATION }}-golden"
 
   tasks:
+    - name: Create local shortcuts for VM variables
+      set_fact:
+        vm_id: "{{ hostvars[target_vm]['proxmox_vmid'] }}"
+        vm_app: "{{ hostvars[target_vm]['APPLICATION'] }}"
+
     - name: Clone Dev VM to a new Template ID
-      shell: "qm clone {{ dev_vmid }} {{ template_vmid }} --full --name {{ template_name }}"
+      shell: "qm clone {{ vm_id }} {{ template_vmid }} --full --name {{ vm_app }}-golden"
       register: clone_result
       failed_when: 
         - clone_result.rc != 0 
