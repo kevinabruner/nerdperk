@@ -1,16 +1,6 @@
 - name: Build the Drupal composer files
   hosts: localhost
   tasks:      
-    - name: Install PHP CLI and Zip dependencies
-      become: true
-      ansible.builtin.package:
-        name:
-          - php-cli
-          - php-zip
-          - unzip
-          - curl
-        state: present
-        
     - name: Copy composer file
       copy:
         src: "{{ git_dir }}/composer.json"
