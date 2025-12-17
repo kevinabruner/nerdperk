@@ -225,13 +225,6 @@
         path: "{{ nfs_target_dir }}"
         mode: "0775"
         recurse: yes
-
-    - name: Update Default VirtualHost to port 81
-      ansible.builtin.replace:
-        path: /etc/apache2/sites-enabled/000-default.conf
-        regexp: '<VirtualHost \*:80>'
-        replace: '<VirtualHost *:81>'
-      become: true
     
     - name: Start apache haproxy and keepalived
       ansible.builtin.systemd:
