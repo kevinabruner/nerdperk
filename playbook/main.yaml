@@ -157,13 +157,13 @@
     - name: Copy php settings file
       become: true
       template:
-        src: "{{ git_dir }}/template/settings.php.j2"
+        src: "{{ git_dir }}/templates/settings.php.j2"
         dest: "/var/www/web/sites/default/settings.php"    
 
     - name: Copy keepalived configuration file
       become: true
       template:
-        src: "{{ git_dir }}/template/keepalived.conf.j2"
+        src: "{{ git_dir }}/templates/keepalived.conf.j2"
         dest: "/etc/keepalived/keepalived.conf"    
             
     - name: Copy theme(s)
