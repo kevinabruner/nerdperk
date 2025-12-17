@@ -54,7 +54,7 @@
       poll: 0
 
 - name: Convert Clone to Template
-  hosts: proxmox_nodes
+  hosts: proxmox
   tasks:
     - name: Wait for Clone to stop
       pause:
