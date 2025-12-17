@@ -28,23 +28,25 @@
         - haproxy             
       become: true
     
-    - name: Enable apache2 and keepalived
+    - name: Enable apache2 haproxy and keepalived
       ansible.builtin.systemd:
         name: "{{ item }}"
         enabled: yes
       loop:
         - apache2
+        - haproxy 
         - keepalived
       become: true
 
-    - name: Stop apache and keepalived
+    - name: Stop apache2 haproxy and keepalived
       ansible.builtin.service:
         name: "{{ item }}"
         state: stopped
       loop:
         - apache2
+        - haproxy
         - keepalived
-      become: true
+      become: true 
 
     - name: Ensure user kevin exists
       user:
@@ -233,5 +235,6 @@
         state: started
       loop:
         - apache2
+        - haproxy
         - keepalived
       become: true
