@@ -61,18 +61,21 @@
     state: directory
   become: true
 
-- name: Sync Drupal build (html and vendor) to server
+- name: Sync web directory
   ansible.posix.synchronize:
-    src: "{{ git_dir }}/.build/"
-    dest: /var/www/
+    src: "{{ git_dir }}/.build/html/"  # Added trailing slash
+    dest: "/var/www/html/"
     delete: yes
     rsync_opts:
-      - "--delete-after"
-      - "--include=html/**"
-      - "--include=vendor/**"
       - "--exclude=sites/default/files"
       - "--exclude=sites/default/settings.php"
-      - "--exclude=*"
+  become: true
+
+- name: Sync vendor directory
+  ansible.posix.synchronize:
+    src: "{{ git_dir }}/.build/vendor/"
+    dest: "/var/www/vendor/"
+    delete: yes
   become: true
 
 - name: Replace Apache options for symlinks
