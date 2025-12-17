@@ -57,6 +57,9 @@
 
 - name: Sanitize the Clone
   hosts: "{{ target_vm }}" # Here we SSH into the CLONE (temporary)
+  vars_files:
+    - vars.yaml
+    - vault.yaml
   become: true
   tasks:
     - name: Clean Cloud-Init and machine-id
