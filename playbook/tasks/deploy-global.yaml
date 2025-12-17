@@ -18,9 +18,10 @@
     - nfs-common
     - htop   
     - keepalived
+    - qemu-guest-agent
   become: true
 
-- name: Enable and stop apache2 and keepalived
+- name: Enable and stop apache2, qemu and keepalived
   ansible.builtin.service:
     name: "{{ item }}"
     enabled: yes
@@ -28,6 +29,7 @@
   loop:
     - apache2
     - keepalived
+    - qemu-guest-agent
   become: true 
 
 - name: Copy keepalived configuration file
@@ -128,7 +130,7 @@
     mode: "0775"
     recurse: yes
 
-- name: Start apache and keepalived
+- name: Start apachem qemu and keepalived
   ansible.builtin.systemd:
     name: "{{ item }}"
     enabled: yes
@@ -136,4 +138,5 @@
   loop:
     - apache2
     - keepalived
+    - qemu-guest-agent
   become: true
