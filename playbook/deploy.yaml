@@ -1,4 +1,4 @@
-- name: Build 
+- name: Deploy code to servers
   hosts: all
   #serial: 1
   vars_files:
@@ -26,19 +26,11 @@
         - htop   
         - keepalived
       become: true
-    
-    - name: Enable apache2 and keepalived
-      ansible.builtin.systemd:
-        name: "{{ item }}"
-        enabled: yes
-      loop:
-        - apache2
-        - keepalived
-      become: true
 
-    - name: Stop apache2 and keepalived
+    - name: Enable and stop apache2 and keepalived
       ansible.builtin.service:
         name: "{{ item }}"
+        enabled: yes
         state: stopped
       loop:
         - apache2
@@ -89,20 +81,6 @@
         state: directory
         mode: "0755"
       run_once: true
-
-    - name: Copy composer file
-      delegate_to: localhost
-      copy:
-        src: "{{ git_dir }}/composer.json"
-        dest: "{{ git_dir }}/.build/composer.json" 
-      run_once: true
-
-    - name: run composer project locally
-      delegate_to: localhost
-      community.general.composer:
-        command: install
-        working_dir: "{{ git_dir }}/.build"
-      run_once: true   
     
     - name: unmount nfs
       become: true
@@ -187,20 +165,6 @@
     - name: Mount all NFS shares
       become: true
       command: mount -a    
-
-    # - name: Run drush cache refresh
-    #   become: true
-    #   command: "{{ drush }} cr"
-    #   args:
-    #     chdir: "/var/www"
-    #   become_user: kevin:www-data
-
-    # - name: Run drush update db
-    #   become: true
-    #   command: "{{ drush }} updb"
-    #   args:
-    #     chdir: "/var/www"
-    #   become_user: kevin:www-data
 
     - name: Change ownership recursively on NFS
       become: true
