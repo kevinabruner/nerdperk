@@ -1,6 +1,5 @@
 - name: Deploy code to servers
   hosts: all
-  #serial: 1
   vars_files:
     - vars.yaml
     - vault.yaml
