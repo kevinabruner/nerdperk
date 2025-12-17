@@ -1,8 +1,8 @@
 - name: Create Production Template from Dev VM
   hosts: proxmox
   vars_files:
-  - vars.yaml
-  - vault.yaml
+    - vars.yaml
+    - vault.yaml
 
   tasks:
     - name: Create local shortcuts for VM variables
