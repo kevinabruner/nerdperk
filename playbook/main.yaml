@@ -232,7 +232,6 @@
         regexp: '<VirtualHost \*:80>'
         replace: '<VirtualHost *:81>'
       become: true
-      notify: Restart Apache
     
     - name: Start apache haproxy and keepalived
       ansible.builtin.systemd:
