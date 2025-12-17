@@ -1,5 +1,5 @@
 - name: Create Production Template from Dev VM
-  hosts: all
+  hosts: proxmox
   vars:
     vars_files:
     - vars.yaml
