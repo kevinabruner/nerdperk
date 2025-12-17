@@ -18,15 +18,15 @@
       failed_when: false
       changed_when: false
 
-    - name: Handle existing template removal
-      when: template_check.rc == 0
-      block:
-        - name: Unprotect Ceph snapshot
-          shell: "rbd snap unprotect ceph/base-{{ template_vmid }}-disk-0@__base__"
-          failed_when: false 
+    # - name: Handle existing template removal
+    #   when: template_check.rc == 0
+    #   block:
+    #     - name: Unprotect Ceph snapshot
+    #       shell: "rbd snap unprotect ceph/base-{{ template_vmid }}-disk-0@__base__"
+    #       failed_when: false 
 
-        - name: Destroy old template
-          shell: "qm destroy {{ template_vmid }} --purge"
+    #     - name: Destroy old template
+    #       shell: "qm destroy {{ template_vmid }} --purge"
     
     - name: Clone Dev VM to a new Template ID
       shell: "qm clone {{ vm_id }} {{ template_vmid }} --full --name {{ template_name }}"
