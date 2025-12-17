@@ -1,5 +1,5 @@
 - name: Build 
-  hosts: nerdperk
+  hosts: all
   #serial: 1
   vars_files:
     - vars.yaml
