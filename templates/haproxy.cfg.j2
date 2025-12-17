@@ -1,0 +1,48 @@
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
+
+# 1. WEB FRONTEND (Port 80 only)
+frontend drupal_frontend
+    bind {{ vip }}:80
+    
+    # Capture the real IP passed from your upstream SSL proxy
+    option forwardfor
+    
+    # Tell Drupal the traffic was originally HTTPS (if the upstream proxy sends this)
+    http-request set-header X-Forwarded-Proto https if { hdr(X-Forwarded-Proto) https }
+
+    default_backend drupal_nodes
+
+# 2. WEB BACKEND
+backend drupal_nodes
+    balance roundrobin
+    # Session stickiness using a cookie
+    cookie SERVERID insert indirect nocache
+    
+    {% set env_group = group_names | intersect(['dev', 'prod']) | first %}
+    {% for host in groups[env_group] %}
+    server {{ host }} {{ hostvars[host]['ansible_host'] }}:81 check cookie {{ host }}
+    {% endfor %}
+
+listen webinterface
+    bind 0.0.0.0:8080
+    mode http
+    stats enable
+    stats uri /
+    stats realm Strictly\ Private
+    stats auth admin:{{ haproxywebpass }}
