@@ -48,6 +48,18 @@
         - keepalived
       become: true 
 
+    - name: Copy keepalived configuration file
+      become: true
+      template:
+        src: "{{ git_dir }}/templates/keepalived.conf.j2"
+        dest: "/etc/keepalived/keepalived.conf"
+
+    - name: Copy the haproxy config file
+      template:
+        src: "{{ git_dir }}/templates/haproxy.cfg.j2"
+        dest: "/etc/haproxy/haproxy.cfg"
+      become: true   
+
     - name: Ensure user kevin exists
       user:
         name: kevin
@@ -160,13 +172,7 @@
       become: true
       template:
         src: "{{ git_dir }}/templates/settings.php.j2"
-        dest: "/var/www/web/sites/default/settings.php"    
-
-    - name: Copy keepalived configuration file
-      become: true
-      template:
-        src: "{{ git_dir }}/templates/keepalived.conf.j2"
-        dest: "/etc/keepalived/keepalived.conf"    
+        dest: "/var/www/web/sites/default/settings.php"     
             
     - name: Copy theme(s)
       copy:
