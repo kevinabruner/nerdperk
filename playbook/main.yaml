@@ -233,7 +233,7 @@
         line: 'Listen 81'
       become: true
     
-    - name: Start apache and keepalived
+    - name: Start apache haproxy and keepalived
       ansible.builtin.systemd:
         name: "{{ item }}"
         enabled: yes
