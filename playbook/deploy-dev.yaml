@@ -1,6 +1,6 @@
 - name: Parallel Deploy for Dev
   hosts: dev
   tasks:
-    - name: Sync and Restart
-      import_tasks: common_deploy_tasks.yml
+    - name: Deploy Drupal
+      import_tasks: deploy-global.yaml
 

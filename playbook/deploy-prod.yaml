@@ -2,5 +2,5 @@
   hosts: prod
   serial: 1  # Forces one-by-one execution
   tasks:
-    - name: Sync and Restart
-      import_tasks: common_deploy_tasks.yml
+    - name: Deploy Drupal
+      import_tasks: deploy-global.yaml
