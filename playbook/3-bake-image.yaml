@@ -1,4 +1,4 @@
-  - name: Create Production Template from Dev VM
+  - name: Create Production Template from Dev VM 
     hosts: proxmox
     vars_files:
       - vars.yaml
@@ -31,6 +31,12 @@
             --name {{ template_name }} \
             --storage truenas-nfs
 
+  - name: Manipulate clone
+    hosts: pve
+    vars_files:
+      - vars.yaml
+      - vault.yaml
+    tasks:
       - name: Ensure Guest Agent is enabled on clone
         shell: "qm set {{ template_vmid }} --agent 1"
 
