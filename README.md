@@ -8,13 +8,13 @@ Ansible is used to manage the application. The Ansible deployment steps are as f
 
 1. Create your dev machines by using [netbox](https://netbox.thejfk.ca) and then deploy them using the [Terraform server](https://github.com/kevinabruner/terraform).
 2. On the Ansible controller, first run the build.yaml playbook to build the composer files into a Drupal application
-    - `ansible-playbook playbook/build-composer.yaml`
+    - `ansible-playbook playbook/1-build-composer.yaml`
 3. Once Drupal is built, you can deploy it to your dev servers.
-    - `ansible-playbook playbook/deploy-dev.yaml`
+    - `ansible-playbook playbook/2-deploy-dev.yaml`
 4. If your dev servers work the way you like, you then bake an image from the 1st dev server
-    - `ansible-playbook playbook/bake-image.yaml`
+    - `ansible-playbook playbook/3-bake-image.yaml`
 5. Once your image is ready, you may destroy, rebuild and reconfigure them in prod one at a time
-    - `ansible-playbook playbook/deploy-prod.yaml`
+    - `ansible-playbook playbook/4-deploy-prod.yaml`
 
 ### Keepalived 
 A single IP address is maintained each for this application's dev and prod environments. The configuration file is located at `templates/keepalived.conf.j2`.
