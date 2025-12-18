@@ -13,7 +13,7 @@
         - mysql-client
         - php
         - php-gd
-        - php-pdof
+        - php-pdo
         - php-mysql
         - php-dom
         - php-mbstring
