@@ -25,7 +25,7 @@ A single IP address is maintained each for this application's dev and prod envir
 This website is built off of a basic Drupal template. The modified [composer.json](composer.json) exists at the root of this server. The composer project is compiled on the ansible controller and deployed pre-compiled to dev servers.
 
 #### Theme and module files
-Theme files are stored in this repo under [templates](templates/). There are no custom module files.
+Theme files are stored in this repo under [themes](themes/). There are no custom module files.
 
 #### NFS
 NFS shares for Drupal file directories will be mounted by ansible. The NAS resides at [nas.thejfk.ca](https://nas.thejfk.ca/)
