@@ -9,22 +9,16 @@ NETBOX_URL = "https://netbox.thejfk.ca/api"
 TOKEN = "18a09ac581f3b2679df0f538698e2893aac493a7"
 
 def get_repo_name():
-    try:
-        # Runs 'git remote get-url origin' and parses the last part of the URL
-        remote_url = subprocess.check_output(["git", "remote", "get-url", "origin"]).decode("utf-8").strip()
-        # Extracts 'nerdperk' from 'https://github.com/user/nerdperk.git'
-        repo_name = remote_url.split("/")[-1].replace(".git", "")
-        return repo_name
-    except Exception:
-        # Fallback to the current directory name if not in a git repo
-        return os.path.basename(os.getcwd())
+    remote_url = subprocess.check_output(["git", "remote", "get-url", "origin"]).decode("utf-8").strip()
+    repo_name = remote_url.split("/")[-1].replace(".git", "")
+    return repo_name
+
 
 def get_netbox_data(endpoint):
     headers = {
         "Authorization": f"Token {TOKEN}",
         "Accept": "application/json"
     }
-    # We fetch all active VMs; we will filter them in Python for accuracy
     response = requests.get(f"{NETBOX_URL}/{endpoint}", headers=headers)
     response.raise_for_status()
     return response.json()
