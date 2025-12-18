@@ -13,7 +13,7 @@
         - mysql-client
         - php
         - php-gd
-        - php-pdo
+        - php-pdof
         - php-mysql
         - php-dom
         - php-mbstring
@@ -106,7 +106,7 @@
             
     - name: Copy theme(s)
       copy:
-        src: "{{ git_dir }}/themes/"
+        src: "{{ git_dir }}/drupal/themes/"
         dest: "/var/www/html/themes/contrib/"    
 
     - name: Set ownership to www-data on target web dir
