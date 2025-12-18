@@ -39,10 +39,11 @@
         
         - name: Clone Dev VM to a new Template ID on TrueNAS
           shell: |
-            qm clone {{ vm_id }} {{ template_vmid }} \
-              --full \
-              --name {{ template_name }} \
-              --storage truenas-nfs
+            qm clone {{ hostvars[target_vm]['proxmox_vmid'] }} {{ hostvars[target_vm]['proxmox_vmid'] }}0 \
+            --full \
+            --name {{ APPLICATION }}-golden \
+            --storage truenas-nfs \
+            --target pve
 
 - name: Manipulate clone
   hosts: pve
@@ -102,8 +103,3 @@
 
     - name: Finalize conversion to Template
       shell: "qm template {{ template_vmid }}"
-
-    - name: Migrate Template to pve for general management
-      shell: "qm migrate {{ template_vmid }} pve"
-      delegate_to: "{{ inventory_hostname }}"
-      when: inventory_hostname != "pve"
