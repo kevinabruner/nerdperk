@@ -9,4 +9,4 @@ nfs_share: /mnt/yes/gitbuilds/{{ APPLICATION }}/files
 dbName: "{{ APPLICATION }}"
 username: "{{ APPLICATION }}"
 drush: /var/www/vendor/drush/drush/drush
-target_vm: nerdperk-dev1
+target_vm: "{{ APPLICATION }}-dev1"

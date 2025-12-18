@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
 import json
 import requests
+import subprocess
+import os
 
 # --- Configuration ---
 NETBOX_URL = "https://netbox.thejfk.ca/api"
 TOKEN = "18a09ac581f3b2679df0f538698e2893aac493a7"
-TARGET_REPO = "nerdperk"
+
+def get_repo_name():
+    try:
+        # Runs 'git remote get-url origin' and parses the last part of the URL
+        remote_url = subprocess.check_output(["git", "remote", "get-url", "origin"]).decode("utf-8").strip()
+        # Extracts 'nerdperk' from 'https://github.com/user/nerdperk.git'
+        repo_name = remote_url.split("/")[-1].replace(".git", "")
+        return repo_name
+    except Exception:
+        # Fallback to the current directory name if not in a git repo
+        return os.path.basename(os.getcwd())
 
 def get_netbox_data(endpoint):
     headers = {
@@ -18,6 +30,8 @@ def get_netbox_data(endpoint):
     return response.json()
 
 def generate_inventory():
+    TARGET_REPO = get_repo_name()
+
     inventory = {
         "_meta": {"hostvars": {}},
         "all": {"children": [TARGET_REPO, "dev", "prod"]},
