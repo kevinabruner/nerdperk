@@ -12,7 +12,7 @@
         terraform taint 'module.{{ inventory_hostname }}.proxmox_vm_qemu.{{ inventory_hostname }}[0]'
         terraform apply -target='module.{{ inventory_hostname }}.proxmox_vm_qemu.{{ inventory_hostname }}[0]' -auto-approve
       args:
-        chdir: "/opt/terraform/proxmox-project"
+        chdir: "/home/kevin/terraform"
 
     - name: Clear old SSH host key from local machine
       delegate_to: localhost
