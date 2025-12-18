@@ -75,3 +75,8 @@
 
       - name: Finalize conversion to Template
         shell: "qm template {{ template_vmid }}"
+
+      - name: Migrate Template to pve for general management
+        shell: "qm migrate {{ template_vmid }} pve"
+        delegate_to: "{{ inventory_hostname }}"
+        when: inventory_hostname != "pve"
