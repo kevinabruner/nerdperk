@@ -99,6 +99,7 @@
         api_host: "{{ inventory_hostname }}"
         vmid: "{{ template_vmid }}"
         state: stopped
+        timeout: 300  
 
     - name: Wait for VM to reach stopped state
       shell: "qm status {{ template_vmid }}"
