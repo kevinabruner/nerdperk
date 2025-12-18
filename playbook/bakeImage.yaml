@@ -44,7 +44,7 @@
         state: started
     
     - name: Wait for Guest Agent to respond
-      shell: "qm guest exec {{ template_vmid }} --/bin/sh -c uptime"
+      shell: "qm guest exec {{ template_vmid }} -- /bin/sh -c uptime"
       register: agent_ready
       until: agent_ready.rc == 0
       retries: 20
