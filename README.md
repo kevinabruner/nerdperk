@@ -8,12 +8,12 @@ Ansible is used to manage the application. The Ansible deployment steps are as f
 
 1. Create your dev machines by using [netbox](https://netbox.thejfk.ca) and then deploy them using the [Terraform server](https://github.com/kevinabruner/terraform).
 2. On the Ansible controller, first run the build.yaml playbook to build the composer files into a Drupal application
-    - `ansible-playbook playbook/build.yaml`
+    - `ansible-playbook playbook/build-composer.yaml`
 3. Once Drupal is built, you can deploy it to your dev servers.
     - `ansible-playbook playbook/deploy-dev.yaml`
 4. If your dev servers work the way you like, you then bake an image from the 1st dev server
-    - `ansible-playbook playbook/bakeImage.yaml`
-5. Once your image is ready, rebuild and reconfigure them in prod one at a time
+    - `ansible-playbook playbook/bake-image.yaml`
+5. Once your image is ready, you may destroy, rebuild and reconfigure them in prod one at a time
     - `ansible-playbook playbook/deploy-prod.yaml`
 
 ### Keepalived 
