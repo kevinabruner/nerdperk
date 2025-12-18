@@ -13,8 +13,7 @@ Ansible is used to manage the application. The Ansible deployment steps are as f
     - `ansible-playbook playbook/deploy-dev.yaml`
 4. If your dev servers work the way you like, you then bake an image from the 1st dev server
     - `ansible-playbook playbook/bakeImage.yaml`
-5. After the image is baked, redeploy your prod servers in Terraform
-6. Once your prod servers are up, reconfigure them
+5. Once your image is ready, rebuild and reconfigure them in prod one at a time
     - `ansible-playbook playbook/deploy-prod.yaml`
 
 ### Keepalived 
