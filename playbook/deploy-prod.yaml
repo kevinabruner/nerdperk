@@ -5,34 +5,51 @@
     - vault.yaml
   serial: 1  # Forces one-by-one execution
   tasks:
-  - name: Enable and stop apache2 and keepalived
-    ansible.builtin.service:
-      name: "{{ item }}"
-      enabled: yes
-      state: stopped
-    loop:
-      - apache2
-      - keepalived
-    become: true 
+    - name: Force Terraform to recreate this specific node
+      delegate_to: tf-manager
+      shell: |
+        terraform taint 'proxmox_vm_qemu.prod_nodes["{{ inventory_hostname }}"]'
+        terraform apply -target='proxmox_vm_qemu.prod_nodes["{{ inventory_hostname }}"]' -auto-approve
+      args:
+        chdir: "/home/kevin/terraform" # Path on the TF server
 
-  - name: Copy keepalived configuration file
-    become: true
-    template:
-      src: "{{ git_dir }}/templates/keepalived.conf.j2"
-      dest: "/etc/keepalived/keepalived.conf"
+    - name: Wait for the new VM to be SSH-ready
+      wait_for:
+        host: "{{ ansible_host }}"
+        port: 22
+        state: started
+        delay: 15
+        timeout: 300
+      delegate_to: localhost # Your local machine checks the IP
 
-  - name: Copy php settings file
-    become: true
-    template:
-      src: "{{ git_dir }}/templates/settings.php.j2"
-      dest: "/var/www/html/sites/default/settings.php"     
+    - name: Enable and stop apache2 and keepalived
+      ansible.builtin.service:
+        name: "{{ item }}"
+        enabled: yes
+        state: stopped
+      loop:
+        - apache2
+        - keepalived
+      become: true 
 
-  - name: Start apache and keepalived
-    ansible.builtin.systemd:
-      name: "{{ item }}"
-      enabled: yes
-      state: started
-    loop:
-      - apache2
-      - keepalived
-    become: true
+    - name: Copy keepalived configuration file
+      become: true
+      template:
+        src: "{{ git_dir }}/templates/keepalived.conf.j2"
+        dest: "/etc/keepalived/keepalived.conf"
+
+    - name: Copy php settings file
+      become: true
+      template:
+        src: "{{ git_dir }}/templates/settings.php.j2"
+        dest: "/var/www/html/sites/default/settings.php"     
+
+    - name: Start apache and keepalived
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: yes
+        state: started
+      loop:
+        - apache2
+        - keepalived
+      become: true
