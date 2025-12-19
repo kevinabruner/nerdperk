@@ -156,13 +156,12 @@
         recurse: yes
 
     - name: Rebuild Drupal Cache (drush cr)
-      become: yes
+      become: true
       become_user: www-data
       ansible.builtin.command:
         cmd: /var/www/vendor/drush/drush/drush cr
       args:
-        chdir: "/var/www"
-      register: drush_cr_result
+        chdir: "/var/www"      
       changed_when: "'Cache rebuild complete' in drush_cr_result.stdout"
       run_once: true
 
