@@ -126,7 +126,7 @@
     - name: Copy .bash_aliases
       copy:
         src: "{{ git_dir }}/drupal/.bash_aliases"
-        dest: "/home/user/{{ ANSIBLE_USER }}"    
+        dest: "/home/user/{{ ANSIBLE_USER }}/"    
 
     - name: Set ownership to www-data on target web dir
       ansible.builtin.file:
