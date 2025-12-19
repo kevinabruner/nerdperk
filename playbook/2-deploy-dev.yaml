@@ -155,9 +155,7 @@
         mode: "0775"
         recurse: yes
 
-    - name: Rebuild Drupal Cache (drush cr)
-      become: true
-      become_user: www-data
+    - name: Rebuild Drupal Cache (drush cr)      
       ansible.builtin.command:
         cmd: /var/www/vendor/drush/drush/drush cr
       args:
@@ -165,9 +163,7 @@
       changed_when: "'Cache rebuild complete' in drush_cr_result.stdout"
       run_once: true
 
-    - name: Update Drupal (drush up)
-      become: yes
-      become_user: www-data
+    - name: Update Drupal (drush up)      
       ansible.builtin.command:
         cmd: /var/www/vendor/drush/drush/drush updb
       args:
