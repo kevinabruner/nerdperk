@@ -159,8 +159,7 @@
       ansible.builtin.command:
         cmd: /var/www/vendor/drush/drush/drush cr
       args:
-        chdir: "/var/www"      
-      changed_when: "'Cache rebuild complete' in drush_cr_result.stdout"
+        chdir: "/var/www"            
       run_once: true
 
     - name: Update Drupal (drush up)      
