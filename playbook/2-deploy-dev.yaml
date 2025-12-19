@@ -154,20 +154,9 @@
         group: "www-data"
         mode: "0775"
         recurse: yes
-
-    - name: Rebuild Drupal Cache (drush cr)      
-      ansible.builtin.command:
-        cmd: /var/www/vendor/drush/drush/drush cr
-      args:
-        chdir: "/var/www"            
-      run_once: true
-
-    - name: Update Drupal (drush up)      
-      ansible.builtin.command:
-        cmd: /var/www/vendor/drush/drush/drush updb
-      args:
-        chdir: "/var/www"      
-      run_once: true
+    
+    - name: Refresh cache and dbs
+      import_tasks: tasks/update-cache-and-dbs.yaml
 
     - name: Start apache2qemu-guest-agent qemu and keepalived
       ansible.builtin.systemd:
