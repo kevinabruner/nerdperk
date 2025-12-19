@@ -60,8 +60,7 @@
       become: true
       ansible.builtin.file:
         path: "/var/www/html/"
-        state: absent
-      run_once: true
+        state: absent      
 
     - name: Create config sync
       file:
