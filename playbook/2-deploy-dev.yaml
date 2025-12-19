@@ -123,6 +123,11 @@
         src: "{{ git_dir }}/drupal/themes/"
         dest: "/var/www/html/themes/contrib/"    
 
+    - name: Copy .bash_aliases
+      copy:
+        src: "{{ git_dir }}/drupal/.bash_aliases"
+        dest: "/home/user/{{ ANSIBLE_USER }}"    
+
     - name: Set ownership to www-data on target web dir
       ansible.builtin.file:
         path: /var/www/
@@ -149,6 +154,25 @@
         group: "www-data"
         mode: "0775"
         recurse: yes
+
+    - name: Rebuild Drupal Cache (drush cr)
+      become: yes
+      become_user: www-data
+      ansible.builtin.command:
+        cmd: /var/www/vendor/drush/drush/drush cr
+      args:
+        chdir: "/var/www"
+      register: drush_cr_result
+      changed_when: "'Cache rebuild complete' in drush_cr_result.stdout"
+
+    - name: Update Drupal (drush up)
+      become: yes
+      become_user: www-data
+      ansible.builtin.command:
+        cmd: /var/www/vendor/drush/drush/drush updb
+      args:
+        chdir: "/var/www"
+      register: drush_up_result
 
     - name: Start apache2qemu-guest-agent qemu and keepalived
       ansible.builtin.systemd:
