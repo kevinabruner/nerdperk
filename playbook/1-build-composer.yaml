@@ -28,4 +28,10 @@
       community.general.composer:
         command: install
         working_dir: "{{ git_dir }}/.build"
-      run_once: true   
+      register: composer_output
+
+    - name: Show composer output
+      debug:
+        var: composer_output.stdout_lines
+      run_once: true
+      when: composer_output.stdout is defined
