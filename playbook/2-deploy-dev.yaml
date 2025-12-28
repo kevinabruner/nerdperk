@@ -149,13 +149,12 @@
     - name: Refresh cache and dbs
       import_tasks: tasks/update-cache-and-dbs.yaml
 
-    - name: Start apache2qemu-guest-agent qemu and keepalived
+    - name: Start apache2 and qemu 
       ansible.builtin.systemd:
         name: "{{ item }}"
         enabled: yes
         state: started
       loop:
         - apache2
-        - keepalived
         - qemu-guest-agent
       become: true
