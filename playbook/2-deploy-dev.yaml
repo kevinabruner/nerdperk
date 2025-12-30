@@ -3,6 +3,23 @@
   vars_files:
     - vars.yaml
     - vault.yaml
+  
+  pre_tasks:
+    - name: Ensure local build directory exists
+      delegate_to: localhost
+      run_once: true
+      ansible.builtin.stat:
+        path: "{{ git_dir }}/.build"
+      register: build_dir
+
+    - name: Halt play if .build is missing
+      ansible.builtin.assert:
+        that:
+          - build_dir.stat.exists
+          - build_dir.stat.isdir
+        fail_msg: "ERROR: The directory '{{ git_dir }}/.build' was not found. Did you forget to run your build script?"
+        success_msg: "Build directory verified. Proceeding with deployment."
+  
   tasks:
     - name: Install apt packages
       apt:
