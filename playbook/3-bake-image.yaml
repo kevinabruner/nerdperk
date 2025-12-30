@@ -1,9 +1,17 @@
 - name: Create Production Template from Dev VM 
+  hosts: role_promxox_hosts
+  vars_files:
+    - vars.yaml
+    - vault.yaml
+  tasks:
+    - name: Create image template tasks from ansible 
+      import_tasks: /home/{{ ANSIBLE_USER }}/ansible/playbook/tasks/drupal/3a-create-template.yaml
+
+- name: Mod template from Dev VM 
   hosts: pve
   vars_files:
     - vars.yaml
     - vault.yaml
-
   tasks:
-    - name: Back image tasks from ansible 
-      import_tasks: /home/{{ ANSIBLE_USER }}/ansible/playbook/tasks/drupal/3-bake-image.yaml
+    - name: Create image template tasks from ansible 
+      import_tasks: /home/{{ ANSIBLE_USER }}/ansible/playbook/tasks/drupal/3b-mod-template.yaml
