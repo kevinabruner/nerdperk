@@ -1,5 +1,5 @@
 - name: Create Production Template from Dev VM 
-  hosts: role_promxox_hosts
+  hosts: role_promxox_host
   vars_files:
     - vars.yaml
     - vault.yaml
