@@ -5,5 +5,5 @@
     - vault.yaml
   serial: 1  
   tasks:
-    - name: Wipe dev from ansible 
+    - name: Wipe dev tasks from ansible 
       import_tasks: /home/{{ ANSIBLE_USER }}/ansible/playbook/tasks/drupal/wipe-dev.yaml

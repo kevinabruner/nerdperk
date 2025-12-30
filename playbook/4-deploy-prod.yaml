@@ -53,7 +53,7 @@
       become: true
 
 - name: Update DBs after deployment
-  hosts: prod
+  hosts: repo_nerdperk:&env_prod
   vars_files:
     - vars.yaml
     - vault.yaml

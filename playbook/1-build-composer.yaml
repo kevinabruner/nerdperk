@@ -3,5 +3,5 @@
   vars_files:
   - vars.yaml
   tasks:      
-    - name: Build composer from ansible
+    - name: Build composer tasks from ansible
       import_tasks: /home/{{ ANSIBLE_USER }}/ansible/playbook/tasks/drupal/1-build-composer.yaml
