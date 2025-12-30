@@ -1,5 +1,5 @@
 - name: Parallel Deploy for Dev
-  hosts: dev
+  hosts: repo_nerdperk:&env_dev
   vars_files:
     - vars.yaml
     - vault.yaml

@@ -1,5 +1,5 @@
 - name: Create Production Template from Dev VM 
-  hosts: proxmox
+  hosts: pve
   vars_files:
     - vars.yaml
     - vault.yaml
