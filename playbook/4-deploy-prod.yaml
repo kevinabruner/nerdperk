@@ -1,5 +1,5 @@
 - name: Serial Rolling Deploy for Prod from golden images
-  hosts: prod
+  hosts: repo_nerdperk:&env_prod
   vars_files:
     - vars.yaml
     - vault.yaml
