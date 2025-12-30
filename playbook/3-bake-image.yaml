@@ -1,5 +1,5 @@
 - name: Create Production Template from Dev VM 
-  hosts: role_proxmox_host
+  hosts: role_proxmox_host:!legs"
   vars_files:
     - vars.yaml
     - vault.yaml
