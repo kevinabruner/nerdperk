@@ -16,9 +16,6 @@ Ansible is used to manage the application. All these playbooks existing in [my A
 5. Once your image is ready, you may destroy, rebuild and reconfigure them in prod one at a time
     - `ansible-playbook playbook/drupal/4-deploy-prod.yaml`
 
-### Keepalived 
-A single IP address is maintained each for this application's dev and prod environments. The configuration file is located at `templates/keepalived.conf.j2`.
-
 ### Drupal
 
 #### Composer
@@ -27,8 +24,10 @@ This website is built off of a basic Drupal template. The modified [drupal/compo
 #### Theme and module files
 Theme files are stored in this repo under [drupal/themes](drupal/themes/). There are no custom module files.
 
-#### NFS
-NFS shares for Drupal file directories will be mounted by ansible. The NAS resides at [nas.thejfk.ca](https://nas.thejfk.ca/)
+#### Ceph & NFS
+All shared storage lives on a ceph drive hosted on Proxmox. This is synced nightly to an NFS share on a ZFS file system with frequent snapshots. Ceph and NFS shares for Drupal file directories will be mounted by ansible. 
+- The NAS resides at [nas.thejfk.ca](https://nas.thejfk.ca/).
+- Ceph exists on the Proxmox cluster at [pve.thejfk.ca](https://pve.thejfk.ca/).
 
 #### Database cluser (Galera)
 The database for this application is stored on two [Galera](https://github.com/kevinabruner/db-server) clusters. Each environment (dev and prod) have their own clusters located at:
