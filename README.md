@@ -24,12 +24,12 @@ This website is built off of a basic Drupal template. The modified [drupal/compo
 #### Theme and module files
 Theme files are stored in this repo under [drupal/themes](drupal/themes/). There are no custom module files.
 
-#### Ceph & NFS
+### Ceph & NFS
 All shared storage lives on a ceph drive hosted on Proxmox. This is synced nightly to an NFS share on a ZFS file system with frequent snapshots. Ceph and NFS shares for Drupal file directories will be mounted by ansible. 
 - The NAS resides at [nas.thejfk.ca](https://nas.thejfk.ca/).
 - Ceph exists on the Proxmox cluster at [pve.thejfk.ca](https://pve.thejfk.ca/).
 
-#### Database cluser (Galera)
+### Database cluser (Galera)
 The database for this application is stored on two [Galera](https://github.com/kevinabruner/db-server) clusters. Each environment (dev and prod) have their own clusters located at:
 - `db-dev.jfkhome`
 - `db-prod.jfkhome`
