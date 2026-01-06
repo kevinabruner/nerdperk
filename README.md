@@ -4,7 +4,7 @@ This is a [website for Joe](https://nerdperk.ca/).
 
 This is built with the following technologies:
 ### Ansible
-Ansible is used to manage the application. All these playbooks existing in [my Ansible repo](https://github.com/kevinabruner/nerdperk/). The Ansible deployment steps are as follows:
+Ansible is used to manage the application. All these playbooks existing in [my Ansible repo](https://github.com/kevinabruner/ansible/). The Ansible deployment steps are as follows:
 
 1. Create your dev machines by using [netbox](https://netbox.thejfk.ca) and then deploy them using the [Terraform server](https://github.com/kevinabruner/terraform).
 2. On the Ansible controller, first run the build.yaml playbook to build the composer files into a Drupal application
