@@ -20,7 +20,7 @@
         "drupal/aggregator": "^2.1",
         "drupal/bartik": "^1.0",
         "drupal/better_social_sharing_buttons": "^4.0",
-        "drupal/bootstrap": "^3.29",
+        "drupal/bootstrap": "^3.4",
         "drupal/bootstrap_layout_builder": "^2.1",
         "drupal/bootstrap_styles": "^1.1",
         "drupal/ckeditor_codemirror": "^3.0@beta",
@@ -45,7 +45,6 @@
         "drush/drush": "^13.0",
         "drupal/smtp": "^1.2",
         "drupal/webform":"^6.2"
-
     },
     "conflict": {
         "drupal/drupal": "*"
