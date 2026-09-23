@@ -28,7 +28,7 @@
         "drupal/core-project-message": "^11.3",
         "drupal/core-recommended": "^11.3",
         "drupal/flippy": "^2.0@beta",
-        "drupal/fontawesome": "^2.26",        
+        "drupal/fontawesome": "^3.0",        
         "drupal/fontyourface": "^4.0",
         "drupal/google_analytics": "^4.0",
         "drupal/google_fonts_api": "^4.0",
