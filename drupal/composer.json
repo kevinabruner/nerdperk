@@ -23,7 +23,6 @@
         "drupal/bootstrap": "^3.29",
         "drupal/bootstrap_layout_builder": "^2.1",
         "drupal/bootstrap_styles": "^1.1",
-        "drupal/ckeditor": "^1.0",
         "drupal/ckeditor_codemirror": "^3.0@beta",
         "drupal/color": "^1.0",
         "drupal/core-composer-scaffold": "^11.2",
