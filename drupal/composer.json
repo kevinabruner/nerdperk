@@ -39,7 +39,6 @@
         "drupal/pathauto": "^1.12",
         "drupal/quickedit": "^1.0",
         "drupal/rdf": "^3.0",
-        "drupal/seven": "^1.0",
         "drupal/token": "^1.13",
         "drupal/youtube": "^2.0",
         "drupal/symfony_mailer":"^1.4",
