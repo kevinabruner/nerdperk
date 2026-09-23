@@ -35,7 +35,7 @@
         "drupal/local_fonts": "^4.0",
         "drupal/login_destination": "^2.0@beta",
         "drupal/media_library_form_element": "^2.1",
-        "drupal/media_library_theme_reset": "^1.6",
+        "drupal/media_library_theme_reset": "^2.0@beta",
         "drupal/pathauto": "^1.12",
         "drupal/quickedit": "^1.0",
         "drupal/rdf": "^4.0",
