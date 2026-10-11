@@ -22,7 +22,6 @@ regions:
 
 libraries:
   - 'nerdperk/fonts'
+  - 'nerdperk/framework'
 
-libraries-extend:
-  bootstrap/framework:
-    - nerdperk/framework
+  
