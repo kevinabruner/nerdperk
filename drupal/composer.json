@@ -46,7 +46,8 @@
         "drupal/webform": "^6.2",
         "drupal/jquery_ui": "^1.8",
         "drupal/jquery_ui_draggable": "^2.1",
-        "drupal/jquery_ui_resizable": "^2.0"
+        "drupal/jquery_ui_resizable": "^2.0",
+        "drupal/s3fs": "^3.11"
 
     },
     "conflict": {
