@@ -1,10 +1,11 @@
 <?php
 
-$settings['s3fs.access_key'] = '{{ apps | selectattr("name", "equalto", target_app) | map(attribute="s3_key") | first }}';
+{# $settings['s3fs.access_key'] = '{{ apps | selectattr("name", "equalto", target_app) | map(attribute="s3_key") | first }}';
 $settings['s3fs.secret_key'] = '{{ apps | selectattr("name", "equalto", target_app) | map(attribute="s3_secret") | first }}';
+$settings['s3fs.use_s3_for_public'] = TRUE;
 $settings['s3fs.use_s3_for_private'] = TRUE;
 $settings['file_private_path'] = 'sites/default/files/private';
-$config['s3fs.settings']['bucket'] = '{{ target_app }}';
+$config['s3fs.settings']['bucket'] = 'nerdperk';
 $config['s3fs.settings']['region'] = 'garage';
 $config['s3fs.settings']['use_customhost'] = TRUE;
 $config['s3fs.settings']['hostname'] = 'garage.thejfk.ca';
@@ -12,7 +13,7 @@ $config['s3fs.settings']['use_path_style_endpoint'] = TRUE;
 $config['s3fs.settings']['use_https'] = TRUE;
 $config['s3fs.settings']['use_versioning'] = FALSE;
 $config['s3fs.settings']['disable_version_sync'] = TRUE;
-$config['system.file']['default_scheme'] = 's3';
+$config['system.file']['default_scheme'] = 's3'; #}
 
 $config['system.logging']['error_level'] = 'verbose';
 
