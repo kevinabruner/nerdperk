@@ -4,6 +4,7 @@ $config['system.logging']['error_level'] = 'verbose';
 
 $settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.yml';
 
+ $config['s3fs.settings']['region'] = "garage";
 
 $settings['file_scan_ignore_directories'] = [
   'node_modules',
